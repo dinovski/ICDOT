@@ -1,0 +1,69 @@
+from flask_wtf import FlaskForm
+from wtforms import DecimalField, StringField, SelectField, IntegerField, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, Optional, Required
+from wtforms.fields.html5 import DateField
+
+from .utils import copy_db_model_to_wtform, copy_wtform_to_db_model, BooleanSelectFieldHelper
+
+from bhot.models.clinical_biopsy import ClinicalBiopsy
+
+
+class ClinicalBiopsyForm(FlaskForm):
+
+    biopsy_date = DateField('Biopsy Date', validators=[DataRequired()] )
+
+    polyoma_virus_pcr = IntegerField('Polyoma virus PCR (log)', validators=[Optional()])
+
+    cell_free_dna_level = IntegerField('cell-free DNA level', validators=[Optional()])
+
+    immunosuppressive_therapy = SelectField('Immunosuppressive drug',
+                                         choices=[("Tacrolimus/Ciclosporine","Tacrolimus/Ciclosporine"),
+                                                   ("MPA","MPA"),
+                                                   ("MMF","MMF"),
+                                                   ("Everolimus/Sirolimus","Everolimus/Sirolimus"),
+                                                   ("Azathioprine","Azathioprine"),
+                                                   ("Belatacept","Belatacept"),
+                                                   ("Steroids","Steroids")])
+
+    preformed_dsa = BooleanSelectFieldHelper('Performed DSA','positive','negative')
+
+    history = SelectField(
+        'History',
+        choices=[('', 'N/A'),
+                 ('denovo', 'de novo'),
+                 ('persistent', 'persistent')]
+    )
+
+    class_immunodominant_dsa = SelectField('Class (immunodominant DSA)',
+                                       choices=[('','N/A'),
+                                                ('I','I (A, B, Cw)'),
+                                                ('II','II (DR, DQ, DP)')])
+
+    specificity_immunodominant_dsa = StringField('Specificity (immunodominant DSA)')
+
+    c1q_binding = StrinfField("C1q binding")
+
+    mfi_immunodominant_dsa = StringField("MFI (immunodominant DSA)")
+
+    non_anti_hla_dsa =  = BooleanSelectFieldHelper('Performed DSA','positive','negative')
+
+    non_anti_hla_dsa_type = StrinfField('Non anti-HLA DSA type')
+
+    pre_transplant_biopsy = SelectField('Pre-transplant biopsy',
+                                       choices=[('','N/A'),
+                                                ('procurement','procurement'),
+                                                ('preimplantation','preimplantation')])
+
+    biopsy_indication = StrinfField('Biopsy indication')
+
+    treatment = StringField('Treatment')
+
+    treatment_start_date = DateField('Treatment Start Date', validators=[Optional()] )
+    treatment_end_date = DateField('Treatment End Date', validators=[Optional()] )
+
+
+    def copy_to_db_model(self,r):
+        copy_wtform_to_db_model(self,r)
+
+    def copy_from_db_model(self,r):
+        copy_db_model_to_wtform(self,r)

@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% from "_form_helpers.html" import render_bootstrap_form_field,
+render_bootstrap_form_field_top_label,
+render_bootstrap_form_field_with_units %}
+
+{% block css %}
+.blue-text {
+  color: #001868;
+}
+img.small_organ_icon {
+    width: 40px;
+    height: 40px;
+}
+
+.entry_step {
+  border-right: 1px solid rgba(189,189,189,1);
+  /*width: 130px; */
+  padding: 5px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.entry_step_active {
+  background-color: white;
+}
+
+.form-group-box {
+   background-color: #F3F3F3;
+   padding: 15px;
+   padding-bottom: 30px;
+   margin-bottom: 10px;
+}
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    {#
+    <div class="row">
+        <div class="col-2 blue-text">
+            <center>
+                Clinical
+
+                <div class="entry_step shadow-box {%if active_step=="recipient" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_recipient_entry")}}">RECIPIENT</a>
+                </div>
+                <div class="entry_step shadow-box {%if active_step=="donor" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_donor_entry")}}">DONOR</a>
+                </div>
+                <div class="entry_step shadow-box {%if active_step=="followup" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_followup_entry")}}">FOLLOWUP</a>
+                </div>
+                <br/>
+                <br/>
+                Biopsy
+                <div class="entry_step shadow-box {%if active_step=="clinical" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_clinical_biopsy_entry")}}">CLINICAL</a>
+                </div>
+                <div class="entry_step shadow-box {%if active_step=="histology" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_histology_entry")}}">HISTOLOGY</a>
+                </div>
+                <div class="entry_step shadow-box {%if active_step=="molecular" %}entry_step_active{% endif %}">
+                    <a href="{{url_for("manual_molecular_entry")}}">MOLECULAR</a>
+                </div>
+            </center>
+        </div>
+        <div class="col-10">
+            {% block data_entry_content %}{% endblock %}
+        </div>
+    </div>#}
+    {% block data_entry_content %}{% endblock %}
+</div>
+{% endblock %}

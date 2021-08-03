@@ -1,0 +1,50 @@
+{% macro render_bootstrap_table(query) %}
+<table class="table table-sm table-stripped">
+    {% if query | length == 0 %}
+    <tr><td>No Data</td></tr>
+    {% else %}
+    <thead>
+        <tr>
+            <th>
+                {# Edit Link #}
+            </th>
+            {% set fields = query[0].__table__.columns._data.keys() %}
+            {% set id_field = fields[0] %}
+            {% set fields = fields[1:] %}
+            {% for key in fields %}
+            <th>
+                {{ key }}
+            </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in query %}
+        <tr>
+            <td>
+                {% if id_field == "recipient_id" %}
+                <a href="{{url_for("recipient_edit", id=r[id_field])}}">edit</a>
+                {% endif %}
+                {% if id_field == "donor_id" %}
+                <a href="{{url_for("donor_edit", id=r[id_field])}}">edit</a>
+                {% endif %}
+                {% if id_field == "followup_id" %}
+                <a href="{{url_for("followup_edit", id=r[id_field])}}">edit</a>
+                {% endif %}
+                {% if id_field == "clinical_biopsy_id" %}
+                <a href="{{url_for("clinical_biopsy_edit", id=r[id_field])}}">edit</a>
+                {% endif %}
+            </td>
+            {% for key in fields %}
+            <td>
+                {% if r[key] %}
+                  {{r[key]}}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% endif %}
+</table>
+{% endmacro %}

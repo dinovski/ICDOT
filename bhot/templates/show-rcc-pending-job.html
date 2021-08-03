@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% from "_form_helpers.html" import render_bootstrap_form_field, render_bootstrap_form_field_no_label  %}
+
+
+{% block content %}
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h3>RCC Report Processing for {{ job.id }}</h3>
+
+            <table class="table">
+                <tr>
+                    <th>Queued at:</th>
+                    <td>{{ job.enqueued_at }}</td>
+                </tr>
+                <tr>
+                    <th>Started at:</th>
+                    <td>{{ job.started_at }}</td>
+                </tr>
+                <tr>
+                    <th>Ended at:</th>
+                    <td>{{ job.ended_at }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td>{{ job.get_status() }}</td>
+                </tr>
+            </table>
+
+            <a href="#" class="btn btn-sm btn-primary"  onClick="window.location.reload();">Refresh</a>
+        </div>
+    </div>
+</div> <!-- end of container -->
+
+{% endblock %}

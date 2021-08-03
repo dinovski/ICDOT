@@ -1,0 +1,12 @@
+import os,sys
+from configobj import ConfigObj
+
+
+config_filename = os.environ.get('BHOT_CONFIG_FILE',"")
+if len(config_filename)==0:
+    sys.exit("BHOT_CONFIG_FILE environment variable not set")
+
+
+config = ConfigObj(config_filename,raise_errors=True,file_error=True)
+
+#TODO: verify certain sections exists, to avoid confusing python "keyError" exceptions.

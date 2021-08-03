@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export BHOT_CONFIG_FILE=$PWD/bhot-dev.conf
+exec gunicorn --reload -b :5000 --access-logfile - --error-logfile - bhot:app

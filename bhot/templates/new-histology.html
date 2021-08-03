@@ -1,0 +1,178 @@
+{% set active_step = "histology" %}
+
+{% extends "layout-data-entry.html" %}
+
+
+{% block data_entry_content %}
+{# "novalidate" is here to prevent client-side automatic HtML5 validation,
+which doesn't work as some of the controls are in hidden tabs,
+and we get "An invalid form control with name= is not focusable."
+https://stackoverflow.com/questions/22148080/an-invalid-form-control-with-name-is-not-focusable
+#}
+<form action="" method="post" class="form" role="form" novalidate>
+    {{ form.csrf_token() }}
+
+    {# this is hidden, but required for automatic tab next/prev navigation #}
+    <ul class="nav nav-tabs d-none" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="true">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.external_biopsy_id, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.biopsy_date, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.biopsy_assessment, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.biopsy_method, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.tissue_technique, class='form-control') }}
+
+                        {{ render_bootstrap_form_field_top_label(form.num_glomeruli, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.num_glomerulosclerosis, class='form-control') }}
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.num_arteries, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.biopsy_assessment_quality, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.atn, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.tma, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.tma_location, class='form-control') }}
+                    </div>
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field(form.acute_lesions_g, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_ptc, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_i, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_t, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_v, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_c4d, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_lesions_c4d_technique, class='form-control') }}
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field(form.chronic_lesions_cg, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.chronic_lesions_ci, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.chronic_lesions_ct, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.chronic_lesions_cv, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.chronic_lesions_ah, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.chronic_lesions_mm, class='form-control') }}
+                    </div>
+                </div>
+
+            </div> {# .row #}
+            <div class="row">
+                <div class="col-12">
+                    <a class='btn btn-light shadow-box float-left' href="{{ url_for("grafts_edit",tid=tid)}}">Cancel</a>
+                    <a class="btn btn-primary btnNext float-right" >Next</a>
+                </div>
+            </div>
+        </div> {# .tab1 #}
+
+        <div class="tab-pane" id="tab2">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field(form.acute_chronic_lesions_ti, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_chronic_lesions_i_ifta, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_chronic_lesions_ifta_pct, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_chronic_lesions_t_ifta, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.acute_chronic_lesions_pvl, class='form-control') }}
+                    </div>
+
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.immunohistochemistry_sv40_t, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunohistochemistry_other, class='form-control') }}
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field(form.immunofluorescence_ig_g, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_ig_g_location, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.immunofluorescence_ig_a, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_ig_a_location, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.immunofluorescence_ig_m, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_ig_m_location, class='form-control') }}
+                        {{ render_bootstrap_form_field(form.immunofluorescence_c3, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_c3_location, class='form-control') }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_c1q, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_c1q_location, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_kappa, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_kappa_location, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_lambda, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_lambda_location, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.immunofluorescence_other, class='form-control') }}
+                    </div>
+                </div>
+            </div> {# .row #}
+            <div class="row">
+                <div class="col-12">
+                    <a class="btn btn-primary btnPrevious float-left" >Back</a>
+                    <a class="btn btn-primary btnNext float-right" >Next</a>
+                </div>
+            </div>
+        </div> {# .tab2 #}
+
+        <div class="tab-pane" id="tab3">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.electron_microscopy_edd, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.electron_microscopy_edd_location, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.electron_microscopy_tg_cg, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.electron_microscopy_pctml, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.electron_microscopy_other, class='form-control') }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group-box">
+                        {{ render_bootstrap_form_field_top_label(form.rejection_diagnosis, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.nonrejection_diagnosis, class='form-control') }}
+                        {{ render_bootstrap_form_field_top_label(form.diagnosis_comments, class='form-control') }}
+                    </div>
+                </div>
+            </div> {# .row #}
+            <div class="row">
+                <div class="col-12">
+                    <a class="btn btn-primary btnPrevious float-left">back</a>
+                    <input type=submit class='btn btn-primary float-right'
+                           value="{{ submit_button_label }}">
+                </div>
+            </div>
+        </div> {# .tab3 #}
+
+    </div> {# .tab-content #}
+
+</form>
+{% endblock %}
+
+{% block javascript %}
+<script>
+{# from: https://stackoverflow.com/a/53168307 #}
+    $('.btnNext').click(function(){
+    $('.nav-tabs > .nav-item > .active').parent().next('li').find('a').trigger('click');
+    });
+
+    $('.btnPrevious').click(function(){
+    $('.nav-tabs > .nav-item > .active').parent().prev('li').find('a').trigger('click');
+    });
+</script>
+{% endblock %}

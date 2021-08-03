@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from "_table_render_helper.html" import render_bootstrap_table %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="{{url_for("index")}}">&larr; BACK</a>
+            <br/>
+            <br/>
+
+            <h3>Donors</h3>
+            <br/>
+            <a class="btn btn-info" href="{{url_for("donor_add")}}">Add New Donor</a>
+            <br/>
+            <br/>
+            <br/>
+            {{ render_bootstrap_table(donors) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% from "_table_render_helper.html" import render_bootstrap_table %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h3>All Recipients</h3>
+            {{ render_bootstrap_table(recipients) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

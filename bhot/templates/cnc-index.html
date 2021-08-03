@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>ICDOT - Command &amp; Control</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <table class="table table-sm">
+                <tr>
+                    <th>Env:</th><td>{{ config.ENV }}</td>
+                </tr>
+                <tr>
+                    <th>Database:</th><td>{{ config.SQLALCHEMY_DATABASE_URI }}</td>
+                </tr>
+                <tr>
+                    <td colspan=2><a class="btn btn-sm btn-light shadow-box" href="{{url_for("users")}}">User Management</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-4">
+            <ul>
+                <li>
+                    <a href="/admin/">Admin</a>
+                    <ul>
+                        <li><a href="/rq">RQ Jobs Dashboard</a></li>
+                        <li><a href="/admin/rediscli">Redis-CLI (for RQ)</a></li>
+                        <li><a href="/admin/recipient">DB - Recipients table</a></li>
+                        <li><a href="/admin/donor">DB - Donors table</a></li>
+                        <li><a href="/admin/followup">DB - Follow-up table</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <form method=post action="{{url_for("test_send_email")}}">
+                <input type=email name="email" placeholder="enter email address">
+                <input type=submit value="send test email">
+            </form>
+        </div>
+    </div> {# .row #}
+</div>
+{% endblock %}

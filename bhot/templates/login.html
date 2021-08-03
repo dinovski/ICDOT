@@ -1,0 +1,25 @@
+{% set show_register = True %}
+{% extends "layout-login.html" %}
+{% from "_form_helpers.html" import render_bootstrap_form_field_no_label %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <form action="" method="post" class="form" role="form">
+        <div class="row justify-content-center">
+            <div class="col-8 login-box shadow-box">
+                {{ form.csrf_token() }}
+
+                {{ render_bootstrap_form_field_no_label(form.email,class="form-control") }}
+                {{ render_bootstrap_form_field_no_label(form.password, class="form-control") }}
+                {# <div class="float-right">Forgot Password?</div> #}
+                <br/>
+                <br/>
+                <center>
+                    <input type=submit class='mx-auto btn btn-primary' value="LOG IN">
+                </center>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

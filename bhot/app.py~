@@ -1,0 +1,20 @@
+import os,sys
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from configobj import ConfigObj
+
+config_filename = os.environ.get('BHOT_CONFIG_FILE',"")
+if len(config_filename)==0:
+    sys.exit("BHOT_CONFIG_FILE environment variable not set")
+
+db = SQLAlchemy()
+
+def create_app():
+
+    app = Flask(__name__)
+
+    config = ConfigObj(config_filename,raise_errors=True,file_error=True)
+    app.config.update(config['flask'])
+
+    db.init_app(app)
+    return app

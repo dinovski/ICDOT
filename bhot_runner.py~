@@ -1,0 +1,9 @@
+import sys
+from app import create_app, db
+#from app.models import User, Follow, Role, Permission, Post, Comment
+
+app = create_app()
+
+@app.route("/")
+def index():
+    return "Hello World"

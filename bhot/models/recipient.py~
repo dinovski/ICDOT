@@ -1,0 +1,10 @@
+from bhot.models import db
+
+class Recipient(db.Model):
+    __tablename__ = 'recipients'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date_of_birth = db.Column(db.DateTime())
+
+    # add any fields related to a patient
+    name = db.Column(db.String(64))

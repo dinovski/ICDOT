@@ -1,0 +1,68 @@
+{% set active_step = "patient" %}
+
+{% extends "layout-data-entry.html" %}
+
+{% block data_entry_content %}
+<form method="post" class="form" role="form">
+    {{ form.csrf_token() }}
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="form-group-box">
+                <div>
+                    <img class="small_organ_icon" src="{{ url_for('static', filename='images/icdot-heart.png') }}">
+                    <img class="small_organ_icon" src="{{ url_for('static', filename='images/icdot-kidneys.png') }}">
+                    <img class="small_organ_icon" src="{{ url_for('static', filename='images/icdot-liver.png') }}">
+                    <img class="small_organ_icon" src="{{ url_for('static', filename='images/icdot-lungs.png') }}">
+                </div>
+                {{ form.organ(class='form-control') }}
+                {% for error in form.organ.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+                <br/>
+                {% for error in form.data_entry_method.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+                <div class="form-check">
+                    <label class="form-check-label control control-radio" for="data_method1">
+                        Enter data manually
+                        <input class="form-check-input control" type="radio"
+                               {% if form.data_entry_method.data == "manual" %}checked{% endif %}
+                               name="data_entry_method" id="data_method1"
+                               value="manual">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <div class="ml-4">
+                        {{ form.transplant_date.label(class="form-label-inline") }}
+                        {{ form.transplant_date(class="form-control-inline") }}
+                        {% for error in form.transplant_date.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <br/>
+                <div class="form-check">
+                    <label class="form-check-label control control-radio" for="data_method2">
+                        Import Data
+                        <input class="form-check-input control" type="radio"
+                               {% if form.data_entry_method.data == "import" %}checked{% endif %}
+                               name="data_entry_method" id="data_method2"
+                               value="import">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <a class='btn btn-light shadow-box float-left' href="{{ url_for("index")}}">Cancel</a>
+            <input type=submit class='btn btn-primary float-right'
+                   value="{{ submit_button_label }}">
+        </div>
+    </div>
+
+</form>
+{% endblock %}

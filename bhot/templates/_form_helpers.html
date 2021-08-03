@@ -1,0 +1,52 @@
+{# see: https://john.soban.ski/pass-bootstrap-html-attributes-to-flask-wtforms.html #}
+{% macro render_bootstrap_form_field(field) %}
+<div class="form-group row {% if field.errors %}text-danger{% endif %}">
+    {{ field.label(class="col-form-label col-sm-4", style="font-weight: bold;") }}
+    <div class="col-sm-8">
+        {{ field(style="width: 100%;" ,**kwargs) }}
+    </div>
+    {% for error in field.errors %}
+    <br/>
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{# see: https://john.soban.ski/pass-bootstrap-html-attributes-to-flask-wtforms.html #}
+{% macro render_bootstrap_form_field_top_label(field) %}
+<div class="form-group {% if field.errors %}text-danger{% endif %}">
+    <b>{{ field.label() }}</b>
+    {{ field(**kwargs)|safe }}
+
+    {% for error in field.errors %}
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+
+{% macro render_bootstrap_form_field_no_label(field) %}
+<div class="form-group {% if field.errors %}text-danger{% endif %}">
+    {{ field(placeholder=field.label.text,**kwargs)|safe }}
+    {% for error in field.errors %}
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro render_bootstrap_form_field_with_units(field,unit_field) %}
+<div class="form-group {% if field.errors %}text-danger{% endif %}">
+    <b>{{ field.label() }}</b>
+    <div class="form-row">
+        <div class="col">
+            {{ field(class="form-control") }}
+        </div>
+        <div class="col">
+            {{ unit_field(class="form-control") }}
+        </div>
+    </div>
+    {% for error in field.errors %}
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endmacro %}

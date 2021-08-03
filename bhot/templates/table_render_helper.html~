@@ -1,0 +1,2 @@
+{% macro render_bootstrap_form_field(field) %}
+{% endmacro %}

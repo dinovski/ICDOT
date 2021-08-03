@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+
+{% block css %}
+table.table-icdot {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid black;
+}
+table.table-icdot th {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <br/>
+
+    {#
+    <div class="row">
+        <div class="col-9"></div>
+        <div class="col-3">
+            <form method="get">
+                <input type="text" name="search" placeholder="search" style="width: 100%;">
+            </form>
+        </div>
+    </div>
+    #}
+    <br/>
+
+    {% if (completed_transplants|length) > 0 %}
+    <div class="row">
+        <div class="col-12">
+            <h3>Recipients</h3>
+            <table class="table table-striped table-sm table-icdot">
+                <thead>
+                    <th>Recipient ID</th>
+                    <th>Organ</th>
+                    <th>Transplant Date</th>
+                    <th>Donor ID</th>
+                    <th>No. Followups</th>
+                    <th>Most Recent Followup</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for p in completed_transplants %}
+                    <tr>
+                        <td>{{ p.external_recipient_id }}</td>
+                        <td>{{ p.organ }}</td>
+                        <td>{{ p.transplant_date.strftime("%d-%b-%Y") }}</td>
+                        <td>{{ p.external_donor_id }}</td>
+                        <td>{{ p.num_followups }}</td>
+                        <td>
+                            {% if p.latest_followup_date %}
+                            {{ p.latest_followup_date.strftime("%d-%b-%Y") }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for("transplant_show",tid=p.transplant_id)}}" class="btn btn-light shadow-box btn-sm">Edit/View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if incomplete_transplants|length >0 %}
+    <div class="row">
+        <div class="col-12">
+            <h3>Incomplete Transplant Records</h3>
+            <table class="table table-striped table-sm table-icdot">
+                <thead>
+                    <th>Created on</th>
+                    <th>Recipient ID</th>
+                    <th>Organ</th>
+                    <th>Transplant Date</th>
+                    <th>Donor ID</th>
+                    <th>No. Followups</th>
+                    <th>Most Recent Followup</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for p in incomplete_transplants %}
+                    <tr>
+                        <td>{{ p.created.strftime("%d-%b-%Y") }}</td>
+                        <td>{{ p.external_recipient_id }}</td>
+                        <td>{{ p.organ }}</td>
+                        <td>{{ p.transplant_date.strftime("%d-%b-%Y") }}</td>
+                        <td>{{ p.external_donor_id }}</td>
+                        <td>{{ p.num_followups }}</td>
+                        <td>
+                            {% if p.latest_followup_date %}
+                            {{ p.latest_followup_date.strftime("%d-%b-%Y") }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for("transplant_show",tid=p.transplant_id)}}" class="btn btn-light shadow-box btn-sm">Edit/View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ url_for("transplant_add")}}" class="btn btn-light btn-dark-outline shadow-box">New Recipient</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

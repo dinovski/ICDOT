@@ -1,0 +1,36 @@
+{% set show_login = True %}
+{% extends "layout-login.html" %}
+{% from "_form_helpers.html" import render_bootstrap_form_field_no_label %}
+
+{% block css %}
+div.login-box {
+   background-color: #D5DBE5;
+   padding: 15px;
+   border: 1px solid white;
+}
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-10 login-box shadow-box">
+            <h1>Contact ICDOT</h1>
+            <p>
+                Etiam ac est sit amet leo porttitor
+                elementum. Pellentesque dapibus elit arcu, a
+                vestibulum felis ullamcorper at. Ut eu ligula commodo,
+                hendrerit risus sit amet, viverra libero. Curabitur
+                vulputate congue elit id gravida. Maecenas dui nulla,
+                ornare sed ante id, fermentum dictum mauris. Aenean
+                fringilla, metus vel maximus tincidunt, dui massa
+                ultrices tortor, et ullamcorper risus eros sit amet
+                eros. Nam accumsan dui non accumsan facilisis. Duis id
+                ultricies est, in rutrum nisi. Quisque ut eleifend
+                erat. Vestibulum varius ligula sit amet justo
+                tristique, non feugiat enim feugiat.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

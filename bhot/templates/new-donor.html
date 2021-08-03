@@ -1,0 +1,80 @@
+{% set active_step = "donor" %}
+
+{% extends "layout-data-entry.html" %}
+
+
+{% block data_entry_content %}
+<form action="" method="post" class="form" role="form">
+    {{ form.csrf_token() }}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-3">
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field_top_label(form.external_donor_id, class='form-control') }}
+                {{ render_bootstrap_form_field(form.age, class='form-control') }}
+                {{ render_bootstrap_form_field(form.gender, class='form-control') }}
+                {{ render_bootstrap_form_field(form.ethnicity, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.dtype, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.cause_of_death, class='form-control') }}
+                {{ render_bootstrap_form_field(form.history_of_hypertension, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.kdri, class='form-control') }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <div class="form-group-box">
+
+                {{ render_bootstrap_form_field(form.diabetes, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.other_comorbidities, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.serum_creatinine, class='form-control') }}
+                {{ render_bootstrap_form_field(form.proteinuria_dipstick, class='form-control') }}
+                {{ render_bootstrap_form_field(form.proteinuria_date, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.egfr, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.egfr_date, class='form-control') }}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-3">
+            <div class="form-group-box">
+                GRAFT BASELINE PARAMETERS
+                <br/>
+                {{ render_bootstrap_form_field_top_label(form.procurement_date, class='form-control') }}
+                {{ render_bootstrap_form_field(form.abo_incompatible, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.hla_a_mismatches, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.hla_b_mismatches, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.hla_dr_mismatches, class='form-control') }}
+                {{ render_bootstrap_form_field_with_units(form.cold_ischemia_time, form.cold_ischemia_units) }}
+
+                {{ render_bootstrap_form_field(form.delayed_graft_function, class='form-control') }}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-3">
+            <div class="form-group-box">
+                GRAFT BASELINE PARAMETERS (Cont.)
+                <br/>
+
+                {{ render_bootstrap_form_field_top_label(form.induction_therapy, class='form-control') }}
+                {{ render_bootstrap_form_field(form.preformed_dsa, class='form-control') }}
+                {{ render_bootstrap_form_field(form.class_immunodominant_dsa, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.specificity_immunodominant_dsa, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.immunodominant_dsa, class='form-control') }}
+
+                {{ render_bootstrap_form_field(form.c1qi_binding, class='form-control') }}
+            </div>
+
+            <br/>
+        </div>
+    </div> {# .row #}
+    <div class="row">
+        <div class="col-12">
+            <a class='btn btn-light shadow-box float-left' href="{{ url_for("transplant_show",tid=tid,_anchor="nav-donor")}}">Cancel</a>
+            <input type=submit class='btn btn-primary float-right'
+                   value="{{ submit_button_label }}">
+        </div>
+    </div>
+</form>
+{% endblock %}

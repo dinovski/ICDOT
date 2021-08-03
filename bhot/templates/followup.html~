@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% from "_form_helpers.html" import render_bootstrap_form_field %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <h3>Donor</h3>
+
+            <form action="" method="post" class="form" role="form">
+                {{ form.csrf_token() }}
+
+                {{ render_bootstrap_form_field(form.age , class='form-control') }}
+                {{ render_bootstrap_form_field(form.gender , class='form-control') }}
+                {{ render_bootstrap_form_field(form.dtype , class='form-control') }}
+                {{ render_bootstrap_form_field(form.cause_of_death , class='form-control') }}
+                {{ render_bootstrap_form_field(form.history_of_hypertension , class='form-control') }}
+                {{ render_bootstrap_form_field(form.hbv_hbs_ag , class='form-control') }}
+                {{ render_bootstrap_form_field(form.hbv_hbs_as , class='form-control') }}
+                {{ render_bootstrap_form_field(form.hbv_hbs_ac , class='form-control') }}
+                {{ render_bootstrap_form_field(form.egfr , class='form-control') }}
+                {{ render_bootstrap_form_field(form.proteinuria , class='form-control') }}
+                {{ render_bootstrap_form_field(form.proteinuria_dipstick , class='form-control') }}
+                {{ render_bootstrap_form_field(form.cold_ischemia_time , class='form-control') }}
+                {{ render_bootstrap_form_field(form.delayed_graft_function , class='form-control') }}
+                {{ render_bootstrap_form_field(form.total_hla_mismatches , class='form-control') }}
+                {{ render_bootstrap_form_field(form.induction_therapy , class='form-control') }}
+                {{ render_bootstrap_form_field(form.preformed_dsa , class='form-control') }}
+                {{ render_bootstrap_form_field(form.class_immunodominant_dsa , class='form-control') }}
+                {{ render_bootstrap_form_field(form.specificity_immunodominant_dsa , class='form-control') }}
+                {{ render_bootstrap_form_field(form.mfi_immunodominant_dsa , class='form-control') }}
+
+                <input type=submit class='btn btn-primary btn-block'>
+                <br/>
+                <a class="btn btn-secondary" href="#" onclick="javascript:history.back();">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

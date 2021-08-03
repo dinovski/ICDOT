@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% from "_form_helpers.html" import render_bootstrap_form_field, render_bootstrap_form_field_no_label  %}
+
+
+{% block content %}
+<br/>
+<div class="container">
+    {% if jobs %}
+    <table class="table table-sm table-striped">
+        <tr>
+            <th>Job ID</th>
+            <th>Status</th>
+            <th>Queued at</th>
+        </tr>
+        {% for j in jobs %}
+        <tr>
+            <td><a target="_blank" href="{{url_for("show_background_job", jobid=j.id) }}">{{ j.id}}</a></td>
+            <td>{{ j.get_status() }}</td>
+            <td>{{ j.enqueued_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    {% else %}
+    No Active Jobs.
+    {% endif %}
+    <br/>
+    <form action="" method="post" class="form" role="form">
+    <div class="row">
+        <div class="col-12">
+            {{ form.csrf_token() }}
+            <input type="submit" class='btn btn-primary shadow-box' value="Start a Background Job">
+        </div>
+    </div>
+    </form>
+</div> <!-- end of container -->
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% set active_step = "molecular" %}
+
+{% extends "layout-data-entry.html" %}
+
+
+{% block data_entry_content %}
+<form action="" method="post" class="form" role="form">
+    {{ form.csrf_token() }}
+
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div class="form-group-box">
+                QC Parameters:
+                <br/>
+                {{ render_bootstrap_form_field_top_label(form.external_biopsy_id, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.run_date, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.run_protocol, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.imaging_qc, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.binding_density_qc, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.pos_ctrl_linear, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.pos_ctrl_limit, class='form-control') }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field_top_label(form.rna_concentration, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.rna_integrity_number, class='form-control') }}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field_top_label(form.rcc_data, class='form-control') }}
+            </div>
+        </div>
+    </div> {# .row #}
+    <div class="row">
+        <div class="col-12">
+            <a class='btn btn-light shadow-box float-left' href="{{ url_for("grafts_edit",tid=tid)}}">Cancel</a>
+            <input type=submit class='btn btn-primary float-right'
+                   value="{{ submit_button_label }}">
+        </div>
+    </div>
+</form>
+{% endblock %}

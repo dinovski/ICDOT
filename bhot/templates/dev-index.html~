@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <ul>
+                <li><a href="{{url_for("login")}}">login</a></li>
+                <li><a href="{{url_for("register")}}">register</a></li>
+                <li><a href="{{url_for("main")}}">main page</a></li>
+                <li><a href="{{url_for("choose")}}">New Patient - Choose Method</a></li>
+                <li><a href="{{url_for("import_spreadsheet")}}">Import Spreadsheet</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

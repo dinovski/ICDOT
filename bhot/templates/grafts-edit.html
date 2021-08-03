@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block css %}
+table.table-icdot {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid black;
+}
+table.table-icdot th {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <h3>Graft Information</h3>
+        </div>
+    </div>
+
+    <div class="row  justify-content-center pt-2">
+        <div class="col-8">
+            {% set c = transplant.clinical_biopsy %}
+            <h3 class="d-inline">Clinical</h3>
+            {% if c %}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("clinical_biopsy_edit",id=c.clinical_biopsy_id)}}">EDIT</a>
+            <br/>
+            <table class="table table-sm table-icdot">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>biopsy_date</th>
+                        <th>Pre-transplant biopsy</th>
+                        <th>Biopsy indication</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ c.external_biopsy_id }}</td>
+                        <td>{{ c.biopsy_date.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ c.pretransplant_biopsy }}</td>
+                        <td>{{ c.biopsy_indication }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% else %}
+            {# No Clinical, show "add" button #}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("clinical_biopsy_add",tid=transplant.transplant_id)}}">ADD</a>
+            <br/>
+            Missing Clinical information
+            {% endif %}
+        </div>
+    </div> {# .row for clinical #}
+
+    <div class="row pt-2  justify-content-center">
+        <div class="col-8">
+            {% set h = transplant.histology %}
+            <h3 class="d-inline">Histology</h3>
+            {% if h %}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("histology_edit",id=h.histology_id)}}">EDIT</a>
+            <table class="table table-sm table-icdot">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>biopsy_date</th>
+                        <th>Assessment</th>
+                        <th>Method</th>
+                        <th>Tissue Tech.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ h.external_biopsy_id }}</td>
+                        <td>{{ h.biopsy_date.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ h.biopsy_assessment }}</td>
+                        <td>{{ h.biopsy_method }}</td>
+                        <td>{{ h.tissue_technique }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% else %}
+            {# No Histology, show "add" button #}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("histology_add",tid=transplant.transplant_id)}}">ADD</a>
+            <br/>
+            Missing Histology information
+            {% endif %}
+        </div>
+    </div> {# .row for histology #}
+
+    <div class="row pt-2  justify-content-center">
+        <div class="col-8">
+            {% set m = transplant.molecular %}
+            <h3 class="d-inline">Molecular</h3>
+            {% if m %}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("molecular_edit",id=m.molecular_id)}}">EDIT</a>
+            <br/>
+            <table class="table table-sm table-icdot">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>RNA concentration</th>
+                        <th>RIN</th>
+                        <th>Protocol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ m.external_biopsy_id }}</td>
+                        <td>{{ m.run_date.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ m.rna_concentration }}</td>
+                        <td>{{ m.rna_integrity_number }}</td>
+                        <td>{{ m.run_protocol }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% else %}
+            {# No Molecular, show "add" button #}
+            <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("molecular_add",tid=transplant.transplant_id)}}">ADD</a>
+            <br/>
+            Missing Molecular information
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col-12">
+            <a class='btn btn-primary shadow-box float-right' href="{{ url_for("transplant_show",tid=transplant.transplant_id,_anchor="nav-grafts")}}">Back</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

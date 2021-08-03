@@ -1,0 +1,71 @@
+{% set active_step = "patient" %}
+
+{% extends "layout-data-entry.html" %}
+
+
+{% block data_entry_content %}
+<form action="" method="post" class="form" role="form">
+    {{ form.csrf_token() }}
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-4">
+
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field_top_label(form.external_recipient_id, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.date_of_birth, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.gender, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.ethnicity, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.nephropathy, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.hiv_status, class='form-control') }}
+            </div>
+
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field(form.hbv_hbs_ag, class='form-control') }}
+                {{ render_bootstrap_form_field(form.hbv_hbs_as, class='form-control') }}
+                {{ render_bootstrap_form_field(form.hbv_hbs_ac, class='form-control') }}
+                {{ render_bootstrap_form_field(form.hcv, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.record_date, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.blood_pressure, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.weight, class='form-control') }}
+
+                {#
+                {{ render_bootstrap_form_field_top_label(form.treatment, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.treatment_start_date, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.treatment_end_date, class='form-control') }}
+                #}
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="form-group-box">
+                {{ render_bootstrap_form_field_top_label(form.disease, class='form-control') }}
+
+                {{ render_bootstrap_form_field_top_label(form.egfr, class='form-control') }}
+                {{ render_bootstrap_form_field_top_label(form.egfr_date, class='form-control') }}
+
+                {{ render_bootstrap_form_field_with_units(form.proteinuria, form.proteinuria_units) }}
+
+                {{ render_bootstrap_form_field(form.proteinuria_dipstick, class='form-control') }} 
+                {{ render_bootstrap_form_field(form.proteinuria_date, class='form-control') }}
+            </div>
+
+        </div>
+
+    </div> {# .row #}
+
+    <div class="row">
+        <div class="col-12">
+            <a class='btn btn-light shadow-box float-left' href="{{ url_for("transplant_show",tid=tid)}}">Cancel</a>
+            <input type=submit class='btn btn-primary float-right'
+                   value="{{ submit_button_label }}">
+        </div>
+    </div>
+
+</form>
+{% endblock %}

@@ -1,0 +1,308 @@
+{% extends "layout.html" %}
+
+{% block css %}
+table.table-icdot {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid black;
+}
+table.table-icdot th {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+a.nav-item {
+  font-size: 28px;
+  color: black !important;
+}
+
+a.btn-add-edit {
+  /* override from previous definitions */
+  position: static;
+  margin-left: 0;
+  top: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+div.nav-tabs {
+  border-bottom: 1px solid white;
+}
+
+{% endblock %}
+
+{% block content %}
+<br/>
+<div class="container">
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h3>Transplant Information</h3>
+            <table class="table table-sm table-icdot">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Organ</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ transplant.transplant_date.strftime("%Y-%m-%d") }}</td>
+                        <td>{{ transplant.organ }}</td>
+                        <td>{{ transplant.status }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link" id="nav-recipient-tab" data-toggle="tab" href="#nav-recipient" role="tab" aria-controls="nav-recipient" aria-selected="true">Recipient</a>
+                    <a class="nav-item nav-link" id="nav-donor-tab" data-toggle="tab" href="#nav-donor" role="tab" aria-controls="nav-donor" aria-selected="false">Donor</a>
+                    <a class="nav-item nav-link" id="nav-grafts-tab" data-toggle="tab" href="#nav-grafts" role="tab" aria-controls="nav-grafts" aria-selected="false">Grafts</a>
+                    <a class="nav-item nav-link" id="nav-followups-tab" data-toggle="tab" href="#nav-followups" role="tab" aria-controls="nav-followups" aria-selected="false">Follow-ups</a>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                
+                <div class="tab-pane fade" id="nav-recipient" role="tabpanel" aria-labelledby="nav-recipient-tab">
+                    {# <h3 class="d-inline">Recipient</h3> #}
+                    <br/>
+                    {% set r = transplant.recipient %}
+                    {% if r %}
+                    <table class="table table-sm table-icdot">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>GENDER</th>
+                                <th>DOB</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ r.external_recipient_id }}</td>
+                                <td>{{ r.gender }}</td>
+                                <td>{{ r.date_of_birth.strftime("%Y-%m-%d") }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("recipient_edit",id=r.recipient_id)}}">EDIT RECIPIENT</a>
+                    {% else %}
+                    {# No recipient, show "add" button #}
+                    Missing Recipient information
+                    <br/>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("recipient_add",tid=transplant.transplant_id)}}">
+                        ADD RECIPIENT</a>
+                    {% endif %}
+                </div> {# .tab-pane for recipient #}
+
+                <div class="tab-pane fade" id="nav-donor" role="tabpanel" aria-labelledby="nav-donor-tab">
+                    {# <h3 class="d-inline">Donor</h3> #}
+                    <br/>
+                    {% set d = transplant.donor %}
+                    {% if d %}
+
+                    <table class="table table-sm table-icdot">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>AGE</th>
+                                <th>GENDER</th>
+                                <th>TYPE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ d.external_donor_id }}</td>
+                                <td>{{ d.age }}</td>
+                                <td>{{ d.gender }}</td>
+                                <td>{{ d.dtype }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("donor_edit",id=d.donor_id)}}">EDIT DONOR</a>
+                    {% else %}
+                    {# No Donor, show "add" button #}
+                    Missing donor information
+                    <br/>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("donor_add",tid=transplant.transplant_id)}}">
+                        ADD DONOR</a>
+                   {% endif %}
+                    <br/>
+                </div> {# .tab-content for nav-bar for donor #}
+
+
+                <div class="tab-pane fade" id="nav-grafts" role="tabpanel" aria-labelledby="nav-grafts-tab">
+                    {# <h3 class="d-inline">Grafts</h3> #}
+                    <br/>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td class="align-top">Clinical:</td>
+                            <td>
+                                {% set c = transplant.clinical_biopsy %}
+                                {% if c %}
+                                <table class="table table-sm table-icdot">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>biopsy_date</th>
+                                            <th>Pre-transplant biopsy</th>
+                                            <th>Biopsy indication</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ c.external_biopsy_id }}</td>
+                                            <td>{{ c.biopsy_date.strftime("%Y-%m-%d") }}</td>
+                                            <td>{{ c.pretransplant_biopsy }}</td>
+                                            <td>{{ c.biopsy_indication }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                No clinical biopsy record
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="align-top">Histology:</td>
+                            <td>
+                                {% set h = transplant.histology %}
+                                {% if h %}
+                                <table class="table table-sm table-icdot">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>biopsy_date</th>
+                                            <th>Assessment</th>
+                                            <th>Method</th>
+                                            <th>Tissue Tech.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ h.external_biopsy_id }}</td>
+                                            <td>{{ h.biopsy_date.strftime("%Y-%m-%d") }}</td>
+                                            <td>{{ h.biopsy_assessment }}</td>
+                                            <td>{{ h.biopsy_method }}</td>
+                                            <td>{{ h.tissue_technique }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                No histology record
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="align-top">Molecular:</td>
+                            <td>
+                                {% set m = transplant.molecular %}
+                                {% if m %}
+                                <table class="table table-sm table-icdot">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>RNA concentration</th>
+                                            <th>RIN</th>
+                                            <th>Protocol</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ m.external_biopsy_id }}</td>
+                                            <td>{{ m.run_date.strftime("%Y-%m-%d") }}</td>
+                                            <td>{{ m.rna_concentration }}</td>
+                                            <td>{{ m.rna_integrity_number }}</td>
+                                            <td>{{ m.run_protocol }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                No molecular record
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("grafts_edit",tid=transplant.transplant_id)}}">EDIT GRAFTS</a>
+                </div> {# .tab-content for nav-bar for grafts: (biopsy/hisotlogy/molecular) #}
+
+                <div class="tab-pane fade" id="nav-followups" role="tabpanel" aria-labelledby="nav-followups-tab">
+                    {# <h3 class="d-inline">Follow-ups</h3> #}
+                    <br/>
+
+                    {% set fus = transplant.followups %}
+                    {% if fus %}
+                    <table class="table table-sm table-icdot">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Blood Pressure</th>
+                                <th>Weight</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in fus %}
+                            <tr>
+                                <td>{{ f.record_date.strftime("%Y-%m-%d") }}</td>
+                                <td>{{ f.blood_pressure }}</td>
+                                <td>{{ f.weight }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-light shadow-box" href="{{url_for("followup_edit",id=f.followup_id)}}">EDIT</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    No follow-ups information
+                    {% endif %}
+                    <br/>
+                    <a class="btn btn-sm btn-light btn-add-edit shadow-box" href="{{url_for("followup_add",tid=transplant.transplant_id)}}">ADD FOLLOW-UP</a>
+                    <br/>
+
+                    <br/>
+                </div> {# .tab-pane for nav-bar for follow-ups #}
+            </div> {# .tab-content #}
+        </div> {# .col-8 #}
+    </div> {# .row #}
+</div> {# .container #}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(function(){  
+
+    /* From: https://stackoverflow.com/a/28316974
+    if the URL inclues an anchor for a tab-name, activate that tab.
+    e.g.   /this/page#tab-donor
+    */
+    var url = document.location.toString();
+    var tab = "nav-recipient"; // the default tab
+    if (url.match('#')) {
+	tab =url.split('#')[1];
+    }
+    console.log("activating tab", tab);
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+
+    //Change hash for page-reload
+    /*
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').on('shown', function (e) {
+        window.location.hash = e.target.hash;
+	console.log("bar", e.target.hash);
+    }); 
+    */
+});
+</script>
+{% endblock %}
