@@ -8,7 +8,7 @@
             <th>
                 {# Edit Link #}
             </th>
-            {% set fields = query[0].__table__.columns._data.keys() %}
+            {% set fields = query[0].__table__.columns.keys() %}
             {% set id_field = fields[0] %}
             {% set fields = fields[1:] %}
             {% for key in fields %}
