@@ -1,21 +1,21 @@
-{
+﻿{
     "kidney": [
         {
-            "variable": "Record Date",
+            "variable": "record date",
             "profile": "recipient",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Patient ID",
+            "variable": "patientID",
             "profile": "recipient",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Date of birth",
+            "variable": "date of birth",
             "profile": "recipient",
             "type": "string",
             "values": "from 1900",
@@ -23,56 +23,56 @@
             "constraint": "optional"
         },
         {
-            "variable": "Transplant Date",
+            "variable": "transplant Date",
             "profile": "recipient",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Pre-transplant dialysis",
+            "variable": "pre-transplant dialysis",
             "profile": "recipient",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Time on dialysis",
+            "variable": "time on dialysis",
             "profile": "recipient",
             "type": "integer",
             "units": "months, years",
             "constraint": "required if pre-transplant dialysis not NA"
         },
         {
-            "variable": "Previous transplant",
+            "variable": "previous transplant",
             "profile": "recipient",
             "type": "string",
             "values": "no, heart, kidney, liver, lung, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Weight",
+            "variable": "weight",
             "profile": "recipient",
             "type": "integer",
             "units": "kilograms, pounds",
             "constraint": "optional"
         },
         {
-            "variable": "Height",
+            "variable": "height",
             "profile": "recipient",
             "type": "integer",
             "units": "cm, inches",
             "constraint": "optional"
         },
         {
-            "variable": "Gender",
+            "variable": "gender",
             "profile": "recipient",
             "type": "string",
             "values": "female, male, other, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Ethnicity",
+            "variable": "ethnicity",
             "profile": "recipient",
             "type": "string",
             "values": "American Indian or Alaska Native, Asian, Black or African American, Hispanic or Latino, Pacific Islander, White",
@@ -114,21 +114,21 @@
             "constraint": "optional"
         },
         {
-            "variable": "Systolic blood pressure",
+            "variable": "systolic blood pressure",
             "profile": "recipient",
             "type": "integer",
             "units": "mm Hg",
             "constraint": "required if diastolic blood pressire not NA"
         },
         {
-            "variable": "Diastolic blood pressure",
+            "variable": "diastolic blood pressure",
             "profile": "recipient",
             "type": "integer",
             "units": "mm Hg",
             "constraint": "required if systolic blood pressure not NA"
         },
         {
-            "variable": "Primary kidney disease",
+            "variable": "primary kidney disease",
             "profile": "recipient",
             "type": "string",
             "values": "amyloidosis,anti-neutrophil cytoplasmic autoantibody (ANCA) vasculitis,congenital abnormality of the kidney or urinary tract (CAKUT),chronic progressive nephropathy (CPN),complement 3 glomerulopathy,congenital nephropathy,diabetes mellitus,diabetic nephropathy,focal segmental glomerulosclerosis (FSGS),glomerular nephropathy,hypertensive kidney disease, IgA nephropathy,interstitial nephropathy/pyelonephritis,Membranoproliferative glomerulonephritis (MPGN),Monoclonal immunoglobulin (Ig) deposition disease (MIDD),vascular nephropathy, alport syndrome,fabry disease,polycystic kidney disease, other:specify,NA",
@@ -138,7 +138,7 @@
             "variable": "eGFR",
             "profile": "recipient",
             "type": "float",
-            "values": "0-120",
+            "values": "0-500",
             "units": "mL/min/1.73m2",
             "constraint": "optional"
         },
@@ -150,14 +150,14 @@
             "constraint": "required if eGFR not NA"
         },
         {
-            "variable": "Proteinuria",
+            "variable": "proteinuria",
             "profile": "recipient",
             "type": "float",
             "units": "g/g, mg/mmol, g/mmol, g/24h, mg/dL, g/L",
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria dipstick",
+            "variable": "proteinuria dipstick",
             "profile": "recipient",
             "type": "string",
             "values": "0,  +,  ++,  +++, ++++, NA",
@@ -165,34 +165,34 @@
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria date",
+            "variable": "proteinuria date",
             "profile": "recipient",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required if proteinuria not NA"
         },
         {
-            "variable": "Recipient ID",
+            "variable": "recipient ID",
             "profile": "donor",
             "type": "string",
             "constraint": "required"
         },
         {
-            "variable": "Donor ID",
+            "variable": "donor ID",
             "profile": "donor",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Donor date of birth",
+            "variable": "donor date of birth",
             "profile": "donor",
             "type": "date",
             "values": "from 1900",
             "constraint": "required if no donor age"
         },
         {
-            "variable": "Age",
+            "variable": "age",
             "profile": "donor",
             "type": "integer",
             "values": "18+",
@@ -200,56 +200,56 @@
             "constraint": "required if no donor DOB"
         },
         {
-            "variable": "Sex",
+            "variable": "sex",
             "profile": "donor",
             "type": "string",
             "values": "female, male, other, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Ethnicity",
+            "variable": "ethnicity",
             "profile": "donor",
             "type": "string",
             "values": "American Indian or Alaska Native, Asian, Black or African American, Hispanic or Latino, Pacific Islander, White",
             "constraint": "optional"
         },
         {
-            "variable": "Procurement date",
+            "variable": "procurement date",
             "profile": "donor",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "optional"
         },
         {
-            "variable": "Donor criteria",
+            "variable": "donor criteria",
             "profile": "donor",
             "type": "string",
             "values": "SCD, ECD",
             "constraint": "optional"
         },
         {
-            "variable": "Donor type",
+            "variable": "donor type",
             "profile": "donor",
             "type": "boolean",
             "values": "deceased, living, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Living donor type",
+            "variable": "living donor type",
             "profile": "donor",
             "type": "string",
             "values": "unrelated, related HLA identical, related non-HLA identical, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Dceased donor type",
+            "variable": "deceased donor type",
             "profile": "donor",
             "type": "string",
             "values": "Donation after brain death, donation after circulatory death, NA, other:specify",
             "constraint": "optional"
         },
         {
-            "variable": "Deceased donor cause of death",
+            "variable": "deceased donor cause of death",
             "profile": "donor",
             "type": "string",
             "values": "anoxia, cerebrovascular/stroke, CNS tumor, head trauma, NA, other:specify",
@@ -264,21 +264,21 @@
             "constraint": "optional"
         },
         {
-            "variable": "Diabetes",
+            "variable": "diabetes",
             "profile": "donor",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "History of hypertension",
+            "variable": "history of hypertension",
             "profile": "donor",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Other comorbidities",
+            "variable": "other comorbidities",
             "profile": "donor",
             "type": "string",
             "values": "free text",
@@ -300,21 +300,21 @@
             "constraint": "required if eGFR not NA"
         },
         {
-            "variable": "Serum creatinine",
+            "variable": "creatininemia",
             "profile": "donor",
             "type": "float",
             "units": "mg/dL",
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria",
+            "variable": "proteinuria",
             "profile": "donor",
             "type": "float",
             "units": "g/g, g/24h, mg/dL, g/L, mg/mmol, g/mmol",
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria dipstick",
+            "variable": "proteinuria dipstick",
             "profile": "donor",
             "type": "string",
             "values": "0,  +,  ++,  +++, ++++, NA",
@@ -322,7 +322,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria date",
+            "variable": "proteinuria date",
             "profile": "donor",
             "type": "string",
             "units": "YYYY-MM-DD",
@@ -336,46 +336,46 @@
             "constraint": "optional"
         },
         {
-            "variable": "Total HLA-A mismatches",
+            "variable": "total HLA-A mismatches",
             "profile": "donor",
             "type": "integer",
             "constraint": "optional"
         },
         {
-            "variable": "Total HLA-B mismatches",
+            "variable": "total HLA-B mismatches",
             "profile": "donor",
             "type": "integer",
             "constraint": "optional"
         },
         {
-            "variable": "Total HLA-DR mismatches",
+            "variable": "total HLA-DR mismatches",
             "profile": "donor",
             "type": "integer",
             "constraint": "optional"
         },
         {
-            "variable": "Cold ischemia time",
+            "variable": "cold ischemia time",
             "profile": "donor",
             "type": "float",
             "units": "minutes, hours",
             "constraint": "optional"
         },
         {
-            "variable": "Delayed graft function",
+            "variable": "delayed graft function",
             "profile": "donor",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Delayed graft function time",
+            "variable": "delayed graft function time",
             "profile": "donor",
             "type": "integer",
             "units": "hours, days",
             "constraint": "optional"
         },
         {
-            "variable": "Induction therapy",
+            "variable": "induction therapy",
             "profile": "donor",
             "type": "string",
             "values": "thymoglbulin, basiliximab, none, NA, other:specify",
@@ -383,7 +383,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Preformed DSA",
+            "variable": "preformed DSA",
             "profile": "donor",
             "type": "boolean",
             "values": "negative, positive, NA",
@@ -397,7 +397,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Immunodominant DSA class",
+            "variable": "immunodominant DSA class",
             "profile": "donor",
             "type": "string",
             "values": "I, II, I/II, NA",
@@ -411,7 +411,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Immunodominant DSA MFI",
+            "variable": "immunodominant DSA MFI",
             "profile": "donor",
             "type": "integer",
             "units": "MFI",
@@ -425,77 +425,77 @@
             "constraint": "optional"
         },
         {
-            "variable": "Biopsy ID",
+            "variable": "biopsy ID",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Donor ID",
+            "variable": "bonor ID",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Patient ID",
+            "variable": "patient ID",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Transplant date",
+            "variable": "transplant date",
             "profile": "graft_biopsy",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy date",
+            "variable": "biopsy date",
             "profile": "graft_biopsy",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Pre-transplant biopsy",
+            "variable": "pre-transplant biopsy",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "procurement, pre-implantation, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Clinical biopsy indication",
+            "variable": "clinical biopsy indication",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "Protocol, Delayed Graft Function, Slow deterioration (progressive increase in serum creatinine over time), Acute renal failure, Proteinuria, Hematuria, Suspicious for acute rejection, Follow-up from previous biopsy: please specify, Suspicious for Polyoma Virus Nephropathy, Transplantectomy biopsy, de novo DSA, NA, other:specify",
             "constraint": "required"
         },
         {
-            "variable": "Creatininemia",
+            "variable": "creatininemia",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "mg/dL, umol/L",
             "constraint": "optional"
         },
         {
-            "variable": "Creatininuria",
+            "variable": "creatininuria",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "mmol/L",
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria",
+            "variable": "proteinuria",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "g/g, g/24h, g/L, mg/mmol, g/mmol",
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria dipstick",
+            "variable": "proteinuria dipstick",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "0,  +,  ++,  +++, ++++, NA",
@@ -503,21 +503,28 @@
             "constraint": "optional"
         },
         {
-            "variable": "Proteinuria date",
+            "variable": "proteinuria date",
             "profile": "graft_biopsy",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required if proteinuria not NA"
         },
         {
-            "variable": "Immunosuppressant",
+            "variable": "protein/creatinine ratio",
+            "profile": "graft_biopsy",
+            "type": "integer",
+            "values": "0-30",
+            "units": "g/g"
+        },
+        {
+            "variable": "immunosuppressant",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "Abatacept, Azathioprine, Belatacept, Cyclosporine, Everolimus, MMF, MPA,  Prednisone, Sirolimus, Tacrolimus, other:specify, none",
             "constraint": "optional"
         },
         {
-            "variable": "Immunosuppressant dose",
+            "variable": "immunosuppressant dose",
             "profile": "graft_biopsy",
             "type": "float",
             "values": "Abatacept_dose, Azathioprine_dose, Belatacept_dose, Cyclosporine_dose, Everolimus_dose, MMF_dose, MPA_dose, Prednisone_dose, Sirolimus_dose, Tacrolimus_dose, other:specify, none",
@@ -525,49 +532,49 @@
             "constraint": "required if immunosuppressant not NA"
         },
         {
-            "variable": "Immunosuppressant trough level (C0)",
+            "variable": "immunosuppressant trough level (C0)",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "ng/ml",
             "constraint": "optional"
         },
         {
-            "variable": "Immunosuppressant postdose level (C2)",
+            "variable": "immunosuppressant postdose level (C2)",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "ng/ml",
             "constraint": "optional"
         },
         {
-            "variable": "Rejection treatment",
+            "variable": "rejection treatment",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "Alemtuzumab, Bortezomib, ATG (Thymoglobulin), Eculizimab, IV corticosteroids, IVIG, Plasmapharesis, Rituximab, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Rejection date",
+            "variable": "rejection date",
             "profile": "graft_biopsy",
             "type": "date",
             "units": "YYYY-MM-DD",
             "constraint": "optional"
         },
         {
-            "variable": "Treatment start date",
+            "variable": "treatment start date",
             "profile": "graft_biopsy",
             "type": "date",
             "units": "YYYY-MM-DD",
             "constraint": "optional"
         },
         {
-            "variable": "Treatment response",
+            "variable": "treatment response",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "Complete response (Cr within 10% of baseline), Partial response (Cr 10-50% over baseline), No response (Cr >50% increase over baseline)",
             "constraint": "optional"
         },
         {
-            "variable": "Donor-derived cell-free DNA",
+            "variable": "donor-derived cell-free DNA",
             "profile": "graft_biopsy",
             "type": "float",
             "units": "percent",
@@ -602,7 +609,7 @@
             "constraint": "required"
         },
         {
-            "variable": "Preformed DSA",
+            "variable": "preformed DSA",
             "profile": "graft_biopsy",
             "type": "boolean",
             "values": "negative, positive, NA",
@@ -616,7 +623,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Immunodominant DSA class",
+            "variable": "immunodominant DSA class",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "I, II, I/II, NA",
@@ -644,105 +651,105 @@
             "constraint": "optional"
         },
         {
-            "variable": "Non anti-HLA DSA",
+            "variable": "non anti-HLA DSA",
             "profile": "graft_biopsy",
             "type": "boolean",
             "values": "negative, positive, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Non anti-HLA DSA type",
+            "variable": "non anti-HLA DSA type",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "AT1R, MICA, ECXM, vimentin, collagen, K-a-1 tubulin, other:specify, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Cause of graft failure",
+            "variable": "cause of graft failure",
             "profile": "graft_biopsy",
             "type": "string",
             "values": "death, infection, recurrent disease, rejection, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Date of graft failure",
+            "variable": "date of graft failure",
             "profile": "graft_biopsy",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "optional"
         },
         {
-            "variable": "Biopsy ID",
+            "variable": "biopsy ID",
             "profile": "histology",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Donor ID",
+            "variable": "donor ID",
             "profile": "histology",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Transplant Date",
+            "variable": "transplant Date",
             "profile": "histology",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy date",
+            "variable": "biopsy date",
             "profile": "histology",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy assessment",
+            "variable": "biopsy assessment",
             "profile": "histology",
             "type": "string",
             "values": "frozen, paraffin, electron microscopy",
             "constraint": "required==paraffin"
         },
         {
-            "variable": "Biopsy method",
+            "variable": "biopsy method",
             "profile": "histology",
             "type": "string",
             "values": "core needle, wedge, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Tissue technique",
+            "variable": "tissue technique",
             "profile": "histology",
             "type": "string",
             "values": "frozen, paraffin, AFA, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Number of cores",
+            "variable": "number of cores",
             "profile": "histology",
             "type": "integer",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Number of glomeruli",
+            "variable": "number of glomeruli",
             "profile": "histology",
             "type": "integer",
             "values": "free text",
             "constraint": "optional"
         },
         {
-            "variable": "Number of global glomerulosclerosis",
+            "variable": "number of global glomerulosclerosis",
             "profile": "histology",
             "type": "integer",
             "values": "free text",
             "constraint": "optional"
         },
         {
-            "variable": "Number of segmentally sclerotic glomeruli",
+            "variable": "number of segmentally sclerotic glomeruli",
             "profile": "histology",
             "type": "integer",
             "values": "free text",
@@ -756,14 +763,14 @@
             "constraint": "optional"
         },
         {
-            "variable": "Number of arteries",
+            "variable": "number of arteries",
             "profile": "histology",
             "type": "integer",
             "values": "free text",
             "constraint": "optional"
         },
         {
-            "variable": "Quality/Adequacy",
+            "variable": "quality/adequacy",
             "profile": "histology",
             "type": "string",
             "values": "adequate, minimal, NA",
@@ -927,7 +934,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Chronic allograft arteriopathy",
+            "variable": "chronic allograft arteriopathy",
             "profile": "histology",
             "type": "boolean",
             "values": "yes, no, NA",
@@ -941,42 +948,42 @@
             "constraint": "optional"
         },
         {
-            "variable": "Mesangial hypercellularity",
+            "variable": "mesangial hypercellularity",
             "profile": "histology",
             "type": "integer",
             "values": "0,1,NA",
             "constraint": "optional"
         },
         {
-            "variable": "Crescents",
+            "variable": "crescents",
             "profile": "histology",
             "type": "integer",
             "values": "0,1,2,NA",
             "constraint": "optional"
         },
         {
-            "variable": "Glomerular thrombi",
+            "variable": "glomerular thrombi",
             "profile": "histology",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Arterial/arteriolar thrombi",
+            "variable": "arterial/arteriolar thrombi",
             "profile": "histology",
             "type": "boolean",
             "values": "yes, no, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Interstitial inflammation: Plasma cells",
+            "variable": "interstitial inflammation by plasma cells",
             "profile": "histology",
             "type": "string",
             "values": "no, minimal, moderate, extensive, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Interstitial inflammation: Eosinophils",
+            "variable": "interstitial inflammation by eosinophils",
             "profile": "histology",
             "type": "string",
             "values": "no, minimal, moderate, extensive, NA",
@@ -990,14 +997,14 @@
             "constraint": "optional"
         },
         {
-            "variable": "Other IHC",
+            "variable": "other IHC",
             "profile": "histology",
             "type": "string",
             "values": "free text",
             "constraint": "optional"
         },
         {
-            "variable": "Electron dense deposits",
+            "variable": "electron dense deposits",
             "profile": "histology",
             "type": "boolean",
             "values": "negative, positive, NA",
@@ -1025,14 +1032,14 @@
             "constraint": "optional"
         },
         {
-            "variable": "Ebdothelial activation",
+            "variable": "endothelial activation",
             "profile": "histology",
             "type": "string",
             "values": "hypertrophy, loss of fenestrations, subendothelial lucency, other:specify, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Transplant glomerulopathy cg",
+            "variable": "transplant glomerulopathy cg",
             "profile": "histology",
             "type": "string",
             "values": "cg0, cg1a, cg1b, cg2, cg3, NA",
@@ -1046,7 +1053,7 @@
             "constraint": "optional"
         },
         {
-            "variable": "Other EM",
+            "variable": "other EM",
             "profile": "histology",
             "type": "string",
             "values": "free text",
@@ -1123,89 +1130,89 @@
             "constraint": "optional"
         },
         {
-            "variable": "Kappa",
+            "variable": "kappa",
             "profile": "histology",
             "type": "string",
             "values": "0, +, ++, +++, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Kappa pattern/location",
+            "variable": "kappa pattern/location",
             "profile": "histology",
             "type": "string",
             "values": "granular/capillary wall, granular/mesangial, linear/capillary wall, linear/mesangial",
             "constraint": "optional"
         },
         {
-            "variable": "Lambda",
+            "variable": "lambda",
             "profile": "histology",
             "type": "string",
             "values": "0, +, ++, +++, NA",
             "constraint": "optional"
         },
         {
-            "variable": "Lambda pattern/location",
+            "variable": "lambda pattern/location",
             "profile": "histology",
             "type": "string",
             "values": "granular/capillary wall, granular/mesangial, linear/capillary wall, linear/mesangial",
             "constraint": "optional"
         },
         {
-            "variable": "Fibrin",
+            "variable": "fibrin",
             "profile": "histology",
             "type": "string",
             "values": "crescent,interstitial,mesangial,segmental glomeruli, NA"
         },
         {
-            "variable": "Principal diagnosis",
+            "variable": "principal diagnosis",
             "profile": "histology",
             "type": "string",
             "values": "Normal, NER, AAMR, CAMR, Acute TCMR, Chronic TCMR, MIXED TCMR/CAMR, C4dNER, PVN, CNIT, Recur GN, De Novo GN, ATI, Donor disease, IFTA NOS, Arteriosclerosis, Inadequate for diagnosis, other:specify"
         },
         {
-            "variable": "Rejection diagnosis",
+            "variable": "rejection diagnosis",
             "profile": "histology",
             "type": "string",
             "values": "No evidence of rejection, Inadequate for assessment of rejection, Active ABMR, Chronic Active ABMR, Chronic ABMR, C4D deposition without morphologic evidence for active rejection, Borderline/Suspicious for acute TCMR, Acute TCMR IA, Acute TCMR IB, Acute TCMR IIA, Acute TCMR IIB, Acute TCMR III, Chronic Active TCMR IA, Chronic Active TCMR IB,Chronic Active TCMR II",
             "constraint": "minimum 1 required"
         },
         {
-            "variable": "Non-rejection diagnosis",
+            "variable": "non-rejection diagnosis",
             "profile": "histology",
             "type": "string",
             "values": "Normal biopsy or nonspecific changes, Inadequate, Rejection only-no additional pathological abnormalities, Other pathology,Glomerular ischemia, Infarction, Not otherwise specified, Suspicious for CNI toxicity,Polyoma Virus Nephropathy Class 1, Polyoma Virus Nephropathy Class 2, Polyoma Virus Nephropathy Class 3, Acute glomerular involvement on LM, Acute arteriolar/arterial involvement on LM, Subacute/chronic glomerular involvement on LM, Subacute/chronic arteriolar/arterial involvement on LM, EM features only, Mild (IFTA1), Moderate (IFTA2), Severe (IFTA3), Significant vascular pathology, Significant arterial intimal thickening, Arterial intimal fibrosis (non-inflammatory), Arterial intimal thickening without fibroelastosis (at least partially), Significant arteriolar hyalinosis, Significant arteriolar hyalinosis-likely donor-dreived, Significant arteriolar hyalinosis - suspicious for CNI toxicity, Infection, Neutrophilic pyelonephritis, Suspicious for pyelonephritis, BK Nephropathy, Granulomatous, Immune complex, Immune complex, Membranous, Immune complex, Lupus nephritis, C3 glomerulopathy, FSGS, FSGS, likely recurrent, Diabetic change, Paraprotein-related, Neoplasia, Preneoplasia/suspicious neoplasia, Post-transplant lymphoproliferative disease",
             "constraint": "minimum 1 required"
         },
         {
-            "variable": "Diagnosis comments",
+            "variable": "diagnosis comments",
             "profile": "histology",
             "type": "string",
             "values": "free text",
             "constraint": "optional"
         },
         {
-            "variable": "Patient ID",
+            "variable": "patient ID",
             "profile": "sequencing",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy ID",
+            "variable": "biopsy ID",
             "profile": "sequencing",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy date",
+            "variable": "biopsy date",
             "profile": "sequencing",
             "type": "string",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Run protocol",
+            "variable": "run protocol",
             "profile": "sequencing",
             "type": "string",
             "values": "High sensitivity, standard",
@@ -1218,7 +1225,7 @@
             "constraint": "required"
         },
         {
-            "variable": "Run date",
+            "variable": "run date",
             "profile": "sequencing",
             "type": "string",
             "units": "YYYY-MM-DD",
@@ -1240,21 +1247,21 @@
             "constraint": "optional"
         },
         {
-            "variable": "Patient ID",
+            "variable": "patient ID",
             "profile": "follow-up",
             "type": "string",
             "values": "free text",
             "constraint": "required"
         },
         {
-            "variable": "Transplant date",
+            "variable": "transplant date",
             "profile": "follow-up",
             "type": "date",
             "units": "YYYY-MM-DD",
             "constraint": "required"
         },
         {
-            "variable": "Biopsy date",
+            "variable": "biopsy date",
             "profile": "follow-up",
             "type": "date",
             "units": "YYYY-MM-DD",
