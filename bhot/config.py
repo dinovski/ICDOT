@@ -1,4 +1,6 @@
 import os,sys,io
+import secrets
+
 from configobj import ConfigObj
 from pprint import pprint
 
@@ -35,3 +37,7 @@ for v in force_bool_values:
             flask_config[v] = flask_config.as_bool(v)
         except ValueError:
             sys.exit("config error: key '%s' value '%s' is not boolean" % (v, flask_config[v]))
+
+secret_key = flask_config.get("SECRET_KEY", "")
+if not secret_key:
+    flask_config["SECRET_KEY"] = secrets.token_hex(16)

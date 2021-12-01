@@ -17,7 +17,7 @@ def get_common_fields(wtform,db_model):
 
     # Get list of python attributes from the db.Model object.
     # These are the the 'db.Columns' members defined in the model sub-class.
-    db_model_fields = db_model.__table__.columns._data.keys()
+    db_model_fields = db_model.__table__.columns.keys()
     #pprint(db_model_fields)
 
     # Only keep those with names matching the form's attribute,
