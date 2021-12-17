@@ -31,6 +31,8 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
         ],
     )
 ]
+# django_coverage_plugin.DjangoTemplatePlugin requires template debugging.
+TEMPLATES[-1]["OPTIONS"]["debug"] = True  # type: ignore[index] # noqa F405
 
 # EMAIL
 # ------------------------------------------------------------------------------
