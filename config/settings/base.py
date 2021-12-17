@@ -133,6 +133,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "bhot.utils.middleware.ignore_scopes_in_admin_middleware",
+    "bhot.utils.middleware.CurrentUserMiddleware",
 ]
 
 # STATIC

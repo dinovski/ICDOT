@@ -41,3 +41,11 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# We need to disable scopes through a monkey-patch, this is because
+# they break django's test runner and pytest-django, for more info see:
+# https://github.com/raphaelm/django-scopes/blob/53633943/README.md#testing
+from django.test import utils  # noqa F402
+from django_scopes import scopes_disabled  # noqa F402
+
+utils.setup_databases = scopes_disabled()(utils.setup_databases)

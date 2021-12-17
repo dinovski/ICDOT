@@ -1,14 +1,17 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
+from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_scopes import ScopedManager
+
+from bhot.utils.threadlocal import get_current_user
 
 
 class User(AbstractUser):
     """Default user for bhot."""
 
     #: First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
+    name = models.CharField(_("Name of User"), blank=True, max_length=255)
     first_name = None  # type: ignore
     last_name = None  # type: ignore
 
@@ -20,3 +23,38 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"username": self.username})
+
+
+class UserRecordingModel(models.Model):
+    created_by = models.ForeignKey(
+        User,
+        null=True,
+        editable=False,
+        related_name="%(class)s_created",
+        on_delete=models.SET_NULL,
+    )
+    modified_by = models.ForeignKey(
+        User,
+        null=True,
+        editable=False,
+        related_name="%(class)s_modified",
+        on_delete=models.SET_NULL,
+    )
+
+    def save(self, *args, **kwargs):
+        user = get_current_user()
+        if user and user.is_authenticated:
+            self.modified_by = user
+            if self._state.adding:
+                self.created_by = user
+        super(UserRecordingModel, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class UserScopedModel(UserRecordingModel):
+    objects = ScopedManager(user="modified_by")
+
+    class Meta:
+        abstract = True
