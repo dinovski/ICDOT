@@ -71,6 +71,7 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "django_tables2",
 ]
 
 LOCAL_APPS = [
@@ -274,3 +275,13 @@ SOCIALACCOUNT_ADAPTER = "bhot.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
+
+# Monkey-patching django to have saner(?) defaults on time based inputs.
+# See https://code.djangoproject.com/ticket/16630#comment:12 as to why
+# django does not do this by default.
+import django.forms  # noqa E402
+
+django.forms.DateInput.input_type = "date"
+django.forms.DateTimeInput.input_type = "datetime"
+django.forms.TimeInput.input_type = "time"

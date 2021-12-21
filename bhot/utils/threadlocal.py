@@ -15,5 +15,5 @@ def get_current_user():
 @contextmanager
 def current_user(user):
     set_current_user(user)
-    yield
+    yield user
     set_current_user(None)

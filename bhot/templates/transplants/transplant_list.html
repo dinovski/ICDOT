@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Transplant List</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <a class="btn btn-primary" href="{% url 'transplants:create' %}" role="button">New</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      {% load django_tables2 %}
+      {% render_table table %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock content %}

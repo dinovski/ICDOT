@@ -1,6 +1,8 @@
+from contextlib import ExitStack
+
 from django.http import HttpRequest
 from django.urls import get_script_prefix
-from django_scopes import scopes_disabled
+from django_scopes import scope, scopes_disabled
 
 from bhot.utils.threadlocal import current_user
 
@@ -21,5 +23,9 @@ class CurrentUserMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        with current_user(getattr(request, "user", None)):
+        user = getattr(request, "user", None)
+        with ExitStack() as stack:
+            stack.enter_context(current_user(user))
+            if user is not None:
+                stack.enter_context(scope(user=user))
             return self.get_response(request)

@@ -1,1 +1,13 @@
 {% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <a class="btn btn-primary" href="{% url 'transplants:table' %}">View Transplants</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

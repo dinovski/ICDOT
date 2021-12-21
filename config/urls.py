@@ -16,6 +16,7 @@ urlpatterns = [
     path("users/", include("bhot.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("transplants/", include("bhot.transplants.urls", namespace="transplants")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
