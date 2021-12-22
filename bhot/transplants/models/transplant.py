@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -17,6 +19,8 @@ class Transplant(UserScopedModel):
         OTHER = "O", _("Other")
 
     # Main information
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant_date = models.DateField()
     donor_ref = models.CharField(max_length=256)
     recipient_ref = models.CharField(max_length=256)

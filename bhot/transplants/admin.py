@@ -1,11 +1,13 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
-from .models import Biopsy, Histology, SequencingData, Transplant
+from bhot.transplants.models import Biopsy, Histology, SequencingData, Transplant
+from bhot.transplants.resources import TransplantResource
 
 
 @admin.register(Transplant)
-class TransplantAdmin(admin.ModelAdmin):
-    pass
+class TransplantAdmin(ImportExportModelAdmin):
+    resource_class = TransplantResource
 
 
 @admin.register(Biopsy)
