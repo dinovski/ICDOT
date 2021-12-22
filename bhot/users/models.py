@@ -41,12 +41,16 @@ class UserRecordingModel(models.Model):
         on_delete=models.SET_NULL,
     )
 
+    def save_with_user_record(self, *args, **kwargs):
+        pass
+
     def save(self, *args, **kwargs):
         user = get_current_user()
         if user and user.is_authenticated:
             self.modified_by = user
             if self._state.adding:
                 self.created_by = user
+        self.save_with_user_record(*args, **kwargs)
         super(UserRecordingModel, self).save(*args, **kwargs)
 
     class Meta:

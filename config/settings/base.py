@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "django_tables2",
+    "import_export",
 ]
 
 LOCAL_APPS = [
@@ -135,7 +136,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "bhot.utils.middleware.ignore_scopes_in_admin_middleware",
     "bhot.utils.middleware.CurrentUserMiddleware",
 ]
 
@@ -276,6 +276,11 @@ SOCIALACCOUNT_ADAPTER = "bhot.users.adapters.SocialAccountAdapter"
 # Your stuff...
 # ------------------------------------------------------------------------------
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+IMPORT_EXPORT_IMPORT_PERMISSION_CODE = "add"
+IMPORT_EXPORT_EXPORT_PERMISSION_CODE = "view"
+
 
 # Monkey-patching django to have saner(?) defaults on time based inputs.
 # See https://code.djangoproject.com/ticket/16630#comment:12 as to why
