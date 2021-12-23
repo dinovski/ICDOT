@@ -62,8 +62,12 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    "django.contrib.admin",
     "django.forms",
+]
+ADMIN_APPS = [
+    "admin_interface",
+    "colorfield",
+    "django.contrib.admin",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -74,14 +78,13 @@ THIRD_PARTY_APPS = [
     "django_tables2",
     "import_export",
 ]
-
 LOCAL_APPS = [
     "bhot.users",
     "bhot.transplants",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + ADMIN_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
@@ -212,7 +215,9 @@ CSRF_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-X_FRAME_OPTIONS = "DENY"
+# We would like to DENY this, but django-admin-interface uses iframes
+# for having related-model creation in a modal instead of a new window.
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # EMAIL
 # ------------------------------------------------------------------------------
