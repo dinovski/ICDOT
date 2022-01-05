@@ -22,6 +22,12 @@ class HistologyAdmin(ImportExportModelAdmin):
 @admin.register(models.SequencingData)
 class SequencingDataAdmin(ImportExportModelAdmin):
     resource_class = resources.SequencingDataResource
+    readonly_fields = ("file_path",)
+
+
+@admin.register(models.FileUpload)
+class FileUploadAdmin(admin.ModelAdmin):
+    model = models.FileUpload
 
 
 class FileUploadInline(admin.TabularInline):
