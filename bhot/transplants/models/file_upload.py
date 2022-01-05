@@ -21,7 +21,11 @@ class FileUpload(UserScopedModel):
 
     batch = models.ForeignKey(
         FileUploadBatch,
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
         related_name="files",
     )
+
+    def __str__(self):
+        return self.file_ref
