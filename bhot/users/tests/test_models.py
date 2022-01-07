@@ -13,7 +13,7 @@ def test_user_get_absolute_url(user: User):
     assert user.get_absolute_url() == f"/users/{user.username}/"
 
 
-def test_user_recording_model():
+def test_user_recording_model_updates_created_and_modified():
 
     user1, user2 = UserFactory(), UserFactory()
 
@@ -39,7 +39,7 @@ def test_user_recording_model():
     assert test.modified_by == user2
 
 
-def test_user_scoped_model():
+def test_user_scoped_model_limits_queries():
 
     user1, user2 = UserFactory(), UserFactory()
 

@@ -1,6 +1,6 @@
 from contextlib import ExitStack
 
-from django_scopes import scope, scopes_disabled
+from django_scopes import scope
 
 from bhot.utils.threadlocal import current_user
 
@@ -13,10 +13,6 @@ class CurrentUserMiddleware:
         user = getattr(request, "user", None)
         with ExitStack() as stack:
             stack.enter_context(current_user(user))
-            if user is None:
-                pass
-            elif user.is_superuser:
-                stack.enter_context(scopes_disabled())
-            else:
+            if user is not None:
                 stack.enter_context(scope(user=user))
             return self.get_response(request)

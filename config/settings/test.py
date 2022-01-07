@@ -42,6 +42,10 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 # Your stuff...
 # ------------------------------------------------------------------------------
 
+# We need to make utils an app for testing, otherwise it can't create
+# models for testing generic stuff.
+INSTALLED_APPS += ["bhot.utils.tests.utils_demo"]  # noqa F405
+
 # We need to disable scopes through a monkey-patch, this is because
 # they break django's test runner and pytest-django, for more info see:
 # https://github.com/raphaelm/django-scopes/blob/53633943/README.md#testing
