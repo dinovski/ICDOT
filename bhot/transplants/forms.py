@@ -22,5 +22,8 @@ class FileUploadBatchAdminForm(forms.ModelForm):
 
     def save_files(self, batch):
         """Process each uploaded file using their names as references."""
+        # It might make sense to have this be called in self.save()
+        # but in a lot of cases we want this when save() is not
+        # actually being called. Keep it stand alone.
         for upload in self.files.getlist("files"):
             FileUpload(batch=batch, file_path=upload, file_ref=upload.name).save()

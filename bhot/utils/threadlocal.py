@@ -4,6 +4,11 @@ from contextlib import contextmanager
 _thread_locals = threading.local()
 
 
+def clear():
+    """Clear all thread local variables."""
+    _thread_locals.__dict__.clear()
+
+
 def set_current_user(user):
     _thread_locals.user = user
 
@@ -14,6 +19,9 @@ def get_current_user():
 
 @contextmanager
 def current_user(user):
+    previous = get_current_user()
     set_current_user(user)
-    yield user
-    set_current_user(None)
+    try:
+        yield user
+    finally:
+        set_current_user(previous)

@@ -41,6 +41,8 @@ class MultiFieldImportField(fields.Field):
 
 
 class ModelResourceWithMultiFieldImport(resources.ModelResource):
+    """This ignores MultiFieldImportField in some of ModelResource's methods."""
+
     def get_export_fields(self):
         return [
             f for f in self.get_fields() if not isinstance(f, MultiFieldImportField)
