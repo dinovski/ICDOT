@@ -44,7 +44,9 @@ class ModelBaseTrackingFileUpload(models.base.ModelBase):
         return newcls
 
 
-class TrackFileUploadMixin(metaclass=ModelBaseTrackingFileUpload):
+class TrackFileUploadModel(models.Model, metaclass=ModelBaseTrackingFileUpload):
+    class Meta:
+        abstract = True
 
     TRACK_FILE_UPLOAD = None
 
@@ -59,6 +61,13 @@ class TrackFileUploadMixin(metaclass=ModelBaseTrackingFileUpload):
         }
 
     @classmethod
+    def disconnect_signals(cls):
+        models.signals.post_save.disconnect(
+            cls._update_file_paths,
+            sender=FileUpload,
+        )
+
+    @classmethod
     def _update_file_paths(cls, sender, instance, **kwargs):
         """Update file paths when uploads matching file refs occur."""
         for refattr, pathattr in cls.TRACK_FILE_UPLOAD.items():
@@ -69,10 +78,15 @@ class TrackFileUploadMixin(metaclass=ModelBaseTrackingFileUpload):
     def _set_file_path(self, refattr, pathattr):
         """Save and update file path if necessary."""
         ref = getattr(self, refattr)
-        if ref == self.__original_file_refs[refattr]:
+        if not self._state.adding and ref == self.__original_file_refs[refattr]:
             return
-        file_upload = FileUpload.objects.get(file_ref=ref)
-        setattr(self, pathattr, file_upload.file_path if file_upload else None)
+        try:
+            file_upload = FileUpload.objects.get(file_ref=ref)
+        except FileUpload.DoesNotExist:
+            setattr(self, pathattr, None)
+
+        else:
+            setattr(self, pathattr, file_upload.file_path)
         self.__original_file_refs[refattr] = ref
 
     def clean(self, *args, **kwargs):

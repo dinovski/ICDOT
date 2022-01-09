@@ -27,7 +27,7 @@ TEST_DATA = (
 
 
 @pytest.fixture
-def schema_setup():
+def setup_models():
     for entry in TEST_DATA:
         author, _ = Author.objects.get_or_create(
             first_name=entry["first_name"], last_name=entry["last_name"]
@@ -38,7 +38,7 @@ def schema_setup():
         review, _ = Review.objects.get_or_create(book=book, content=entry["content"])
 
 
-def test_import_export_works(schema_setup):
+def test_import_export_works(setup_models):
     class AuthorResource(ModelResourceWithMultiFieldImport):
         class Meta:
             model = Author
