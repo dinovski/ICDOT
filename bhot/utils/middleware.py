@@ -1,8 +1,17 @@
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 
 from django_scopes import scope
 
 from bhot.utils.threadlocal import current_user
+
+
+@contextmanager
+def current_user_and_scope(user):
+    with ExitStack() as stack:
+        stack.enter_context(current_user(user))
+        if user is not None:
+            stack.enter_context(scope(user=user))
+        yield
 
 
 class CurrentUserMiddleware:
@@ -11,8 +20,5 @@ class CurrentUserMiddleware:
 
     def __call__(self, request):
         user = getattr(request, "user", None)
-        with ExitStack() as stack:
-            stack.enter_context(current_user(user))
-            if user is not None:
-                stack.enter_context(scope(user=user))
+        with current_user_and_scope(user):
             return self.get_response(request)

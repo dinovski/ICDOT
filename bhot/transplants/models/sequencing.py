@@ -3,11 +3,11 @@ import uuid
 from django.db import models
 
 from bhot.transplants.models.biopsy import Biopsy
-from bhot.transplants.models.file_upload import TrackFileUploadMixin
+from bhot.transplants.models.file_upload import TrackFileUploadModel
 from bhot.users.models import UserScopedModel
 
 
-class SequencingData(TrackFileUploadMixin, UserScopedModel):
+class SequencingData(UserScopedModel, TrackFileUploadModel):
     class Meta:
         verbose_name_plural = "sequencing data"
 
