@@ -1,7 +1,6 @@
 import uuid
 
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from bhot.users.models import UserScopedModel
@@ -40,12 +39,3 @@ class Transplant(UserScopedModel):
 
     def __str__(self):
         return f"{self.transplant_date} from {self.donor_ref} to {self.recipient_ref}"
-
-    def get_absolute_url(self):
-        """Get url for transplant's detail view.
-
-        Returns:
-            str: URL for transplant detail.
-
-        """
-        return reverse("transplants:detail", kwargs={"pk": self.pk})
