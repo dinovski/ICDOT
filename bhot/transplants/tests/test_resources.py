@@ -25,3 +25,14 @@ def test_all_resources_import_export(user, fill_optional, resource):
         dataset = instance.export()
         assert len(dataset) == 5
         instance.import_data(dataset)
+
+
+def test_invalid_field(user):
+    instance = resources.TransplantResource()
+    with current_user_and_scope(user=user):
+        baker.make("transplants.Transplant")
+        dataset = instance.export()
+        dataset[0] = ["invalid_date" for _ in dataset[0]]
+        result = instance.import_data(dataset)
+        assert result.has_validation_errors()
+        assert not result.has_errors()

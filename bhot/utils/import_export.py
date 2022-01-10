@@ -1,4 +1,36 @@
-from import_export import fields, resources
+from django.core.exceptions import ValidationError
+from django.utils.encoding import force_str
+from import_export import fields, instance_loaders, resources
+
+
+class ValidatingModelInstanceLoader(instance_loaders.ModelInstanceLoader):
+    """
+    Instance loader for Django model.
+
+    Lookup for model instance by ``import_id_fields``.
+    """
+
+    def _get_instance(self, row):
+        errors = {}
+        params = {}
+        for key in self.resource.get_import_id_fields():
+            field = self.resource.fields[key]
+            try:
+                params[field.attribute] = field.clean(row)
+            except ValueError as e:
+                errors[field.attribute] = ValidationError(force_str(e), code="invalid")
+        if errors:
+            raise ValidationError(errors)
+        if params:
+            return self.get_queryset().get(**params)
+        else:
+            return None
+
+    def get_instance(self, row):
+        try:
+            self._get_instance(row)
+        except self.resource._meta.model.DoesNotExist:
+            return None
 
 
 class MultiFieldImportField(fields.Field):
@@ -43,10 +75,15 @@ class MultiFieldImportField(fields.Field):
 class ModelResourceWithMultiFieldImport(resources.ModelResource):
     """This ignores MultiFieldImportField in some of ModelResource's methods."""
 
+    @staticmethod
+    def _skip_multi_fields(fields):
+        return [f for f in fields if not isinstance(f, MultiFieldImportField)]
+
     def get_export_fields(self):
-        return [
-            f for f in self.get_fields() if not isinstance(f, MultiFieldImportField)
-        ]
+        return self._skip_multi_fields(super().get_export_fields())
+
+    def get_user_visible_fields(self):
+        return self._skip_multi_fields(super().get_user_visible_fields())
 
     def import_field(self, field, obj, data, is_m2m=False, **kwargs):
         if not field.attribute:
@@ -64,9 +101,7 @@ class ModelResourceWithMultiFieldImport(resources.ModelResource):
         returns `None`.
         """
         import_id_fields = [self.fields[f] for f in self.get_import_id_fields()]
-        for field in import_id_fields:
-            if field.column_name not in row and not isinstance(
-                field, MultiFieldImportField
-            ):
+        for field in self._skip_multi_fields(import_id_fields):
+            if field.column_name not in row:
                 return instance_loader.get_instance(row)
         return instance_loader.get_instance(row)
