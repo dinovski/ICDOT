@@ -75,8 +75,8 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "django_tables2",
     "import_export",
+    "django_markwhat",
 ]
 LOCAL_APPS = [
     "bhot.users",
@@ -190,6 +190,9 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "libraries": {
+                "custom_tags": "bhot.templatetags.custom_tags",
+            },
         },
     }
 ]
