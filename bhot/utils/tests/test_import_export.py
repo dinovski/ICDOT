@@ -98,7 +98,7 @@ def test_import_export_works(setup_models):
 
     # If we remove a column used for id_fields we expect nothing to load.
     del dataset["first_name"]
-    with pytest.raises(KeyError):
+    with pytest.raises(ValueError):
         result = ReviewResource().import_data(dataset, raise_errors=True, dry_run=False)
 
 

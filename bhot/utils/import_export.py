@@ -27,6 +27,7 @@ class ValidatingModelInstanceLoader(instance_loaders.ModelInstanceLoader):
             return None
 
     def get_instance(self, row):
+        """Return a mathing instance or None."""
         try:
             self._get_instance(row)
         except self.resource._meta.model.DoesNotExist:
@@ -95,13 +96,8 @@ class ModelResourceWithMultiFieldImport(resources.ModelResource):
         field.save(obj, data, is_m2m, **kwargs)
 
     def get_instance(self, instance_loader, row):
-        """
-        If all 'import_id_fields' are present in the dataset, calls
-        the :doc:`InstanceLoader <api_instance_loaders>`. Otherwise,
-        returns `None`.
-        """
         import_id_fields = [self.fields[f] for f in self.get_import_id_fields()]
         for field in self._skip_multi_fields(import_id_fields):
             if field.column_name not in row:
-                return instance_loader.get_instance(row)
+                raise ValueError(f"Missing identifying field {field.column_name}")
         return instance_loader.get_instance(row)
