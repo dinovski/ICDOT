@@ -41,5 +41,10 @@ class FileUploadBatchAdmin(admin.ModelAdmin):
     inlines = [FileUploadInline]
 
     def save_related(self, request, form, formsets, change):
+        # From https://web.archive.org/web/20220107040356/
+        # https://xn--w5d.cc/2019/09/18/minimalistic-multiupload-in-django-admin.html
+        # ModelAdmin handles saving the object separately and only
+        # calls form’s save() method with commit=False.
+        # We must call the save_files method manually.
         super().save_related(request, form, formsets, change)
         form.save_files(form.instance)

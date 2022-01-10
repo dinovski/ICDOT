@@ -276,3 +276,5 @@ bhot/media/
 .env
 .envs/*
 !.envs/.local/
+
+git-ignored/
