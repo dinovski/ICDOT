@@ -2,6 +2,11 @@
 
 This website can be used to upload and manage transplant data.
 
+Information is organized using the following objects: `Transplant`,
+`Biopsy`, `Histology`, `SequencingData`.
+
+**Import / Export** is possible for each of the above in `json`, `csv`, or `xlsx` formats.
+
 ## References
 
 Fields names ending in `_ref` indicate references.
