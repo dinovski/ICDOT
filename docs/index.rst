@@ -12,6 +12,7 @@ Welcome to bhot's documentation!
 
    howto
    users
+   transplants
 
 
 
