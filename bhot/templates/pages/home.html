@@ -1,1 +1,25 @@
 {% extends "base.html" %}
+{% load markup %}
+{% load custom_tags %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="jumbotron  my-4">
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="{% url 'admin:app_list' 'transplants' %}" role=buton>Manage transplant data</a>
+        </p>
+        <hr class="my-4">
+      </div>
+
+      {% read_file 'transplants/overview.md' as source %}
+      {{ source | markdown:"safe" }}
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

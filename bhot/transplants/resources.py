@@ -8,7 +8,6 @@ from bhot.utils.import_export import (
 # Because of django_scopes being in effect we do not need to add
 # the user to the id_fields, it will be scoped to the current user,
 # this is actually what we want.
-# TODO: Write some tests for this!
 
 
 class TransplantResource(ModelResourceWithMultiFieldImport):
