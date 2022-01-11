@@ -77,6 +77,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "import_export",
     "django_markwhat",
+    "loginas",
 ]
 LOCAL_APPS = [
     "bhot.users",
