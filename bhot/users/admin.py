@@ -10,6 +10,7 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
+    change_form_template = "loginas/change_form.html"
 
     form = UserChangeForm
     add_form = UserCreationForm
