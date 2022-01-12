@@ -15,6 +15,7 @@ class TransplantResource(ModelResourceWithMultiFieldImport):
         model = Transplant
         exclude = [f.name for f in model._meta.fields if not f.editable]
         instance_loader_class = ValidatingModelInstanceLoader
+        clean_model_instances = True
         import_id_fields = ["transplant_date", "donor_ref", "recipient_ref"]
 
 
@@ -23,6 +24,7 @@ class BiopsyResource(ModelResourceWithMultiFieldImport):
         model = Biopsy
         exclude = [f.name for f in model._meta.fields if not f.editable]
         instance_loader_class = ValidatingModelInstanceLoader
+        clean_model_instances = True
         import_id_fields = ["transplant", "biopsy_date"]
 
     transplant = MultiFieldImportField(
@@ -37,6 +39,7 @@ class HistologyResource(ModelResourceWithMultiFieldImport):
         model = Histology
         exclude = [f.name for f in model._meta.fields if not f.editable]
         instance_loader_class = ValidatingModelInstanceLoader
+        clean_model_instances = True
         import_id_fields = ["biopsy", "histology_date"]
 
     biopsy = MultiFieldImportField(
@@ -52,6 +55,7 @@ class SequencingDataResource(ModelResourceWithMultiFieldImport):
         model = SequencingData
         exclude = [f.name for f in model._meta.fields if not f.editable]
         instance_loader_class = ValidatingModelInstanceLoader
+        clean_model_instances = True
         import_id_fields = ["biopsy", "sequencing_date"]
 
     biopsy = MultiFieldImportField(
