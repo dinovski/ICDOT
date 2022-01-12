@@ -50,7 +50,7 @@
               </li>
               {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'admin:app_list' 'transplants' %}">Transplants</a>
+                  <a class="nav-link" href="{% url 'admin:index' %}">Transplants</a>
                 </li>
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
