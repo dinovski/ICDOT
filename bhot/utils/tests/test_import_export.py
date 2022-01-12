@@ -3,6 +3,7 @@ import pytest
 from bhot.utils.import_export import (
     ModelResourceWithMultiFieldImport,
     MultiFieldImportField,
+    ValidatingModelInstanceLoader,
 )
 from bhot.utils.tests.utils_demo.models import Author, Book, Review
 
@@ -36,6 +37,24 @@ def setup_models():
             author=author, title=entry["title"], desc=entry["desc"]
         )
         review, _ = Review.objects.get_or_create(book=book, content=entry["content"])
+
+
+def test_validating_model_instance_loader(setup_models):
+    class AuthorResource(ModelResourceWithMultiFieldImport):
+        class Meta:
+            model = Author
+            exclude = ["id"]
+            import_id_fields = ["first_name", "last_name"]
+
+    resource = AuthorResource()
+    dataset = resource.export()
+    assert len(dataset) == len(TEST_DATA)
+
+    instance_loader_class = ValidatingModelInstanceLoader(resource, dataset=None)
+
+    instances = set(instance_loader_class.get_instance(row) for row in dataset.dict)
+
+    assert len(instances) == len(TEST_DATA)
 
 
 def test_import_export_works(setup_models):

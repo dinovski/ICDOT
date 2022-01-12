@@ -1,10 +1,22 @@
+import os
 import uuid
 
 from django.core import exceptions
 from django.db import models
+from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
 from bhot.users.models import UserScopedModel
+
+
+@deconstructible
+class RandomFileName(object):
+    def __init__(self, path):
+        self.path = os.path.join(path, "%s%s")
+
+    def __call__(self, _, filename):
+        extension = os.path.splitext(filename)[1]
+        return self.path % (uuid.uuid4(), extension)
 
 
 class FileUploadBatch(UserScopedModel):
@@ -19,7 +31,7 @@ class FileUpload(UserScopedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     file_ref = models.CharField(max_length=256)
-    file_path = models.FileField()
+    file_path = models.FileField(upload_to=RandomFileName("upload"))
 
     batch = models.ForeignKey(
         FileUploadBatch,
