@@ -21,15 +21,19 @@ class ValidatingModelInstanceLoader(instance_loaders.ModelInstanceLoader):
                 errors[field.attribute] = ValidationError(force_str(e), code="invalid")
         if errors:
             raise ValidationError(errors)
-        if params:
-            return self.get_queryset().get(**params)
-        else:
+        if not params:
             return None
+        try:
+            return self.get_queryset().get(**params)
+        except self.resource._meta.model.MultipleObjectsReturned:
+            raise ValidationError(
+                f"More than one {self.resource._meta.model.__name__} match this row."
+            )
 
     def get_instance(self, row):
         """Return a mathing instance or None."""
         try:
-            self._get_instance(row)
+            return self._get_instance(row)
         except self.resource._meta.model.DoesNotExist:
             return None
 
