@@ -19,6 +19,47 @@ Learn how to develop locally_ on this project.
 
 .. _locally: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
 
+All of the documentation below applies, but when using docker-compose things will look like this::
+
+    $ docker-compose -f local.yml up
+    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+    $ docker-compose -f local.yml run --rm django
+    $ docker-compose -f local.yml run --rm django bash -c "coverage run -m pytest -s -v && coverage report -m"
+
+
+If you need access to a debugger, for example when using `ipdb` you should use `... run --service-ports ...`.
+
+
+What is `pre-commit`
+^^^^^^^^^^^^^^^^^^^
+
+When you made some changes you will need to git commit them. This project uses `pre-commit` to ensure everything is okay before creating a commit. When this is happening you might get an error about `pre-commit` not being installed. This hapens if you have not installed the project locally and have _only_ been relying on the docker environement.
+
+Check `pre-commit`'s documentation_ but one way of installing it locally is:
+
+.. _documentation: https://pre-commit.com/#install
+
+::
+
+    $ python3.9 -m venv venv
+    $ source venv/bin/activate
+    $ pre-commit install
+
+
+How to update models
+^^^^^^^^^^^^^^^^^^^^
+
+Adding fields to models happens by first editing `<bhot/transplants/models/>`_.
+
+Then don't forget to build the migrations::
+
+  $ docker-compose -f local.yml run --rm django python manage.py makemigrations
+
+And once you've tested and are happy with that you can commit it::
+
+  $ git add bhot/ransplants/migrations/
+
+
 Settings
 --------
 
