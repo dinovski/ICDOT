@@ -25,11 +25,6 @@ class SequencingDataAdmin(ImportExportModelAdmin):
     readonly_fields = ("file_path",)
 
 
-@admin.register(models.FileUpload)
-class FileUploadAdmin(admin.ModelAdmin):
-    model = models.FileUpload
-
-
 class FileUploadInline(admin.TabularInline):
     model = models.FileUpload
     max_num = 0
