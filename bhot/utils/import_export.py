@@ -1,3 +1,4 @@
+import tablib
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 from import_export import fields, instance_loaders, resources
@@ -89,6 +90,17 @@ class ModelResourceWithMultiFieldImport(resources.ModelResource):
 
     def get_user_visible_fields(self):
         return self._skip_multi_fields(super().get_user_visible_fields())
+
+    def import_data(self, dataset, **kwargs):
+        clean_dataset = tablib.Dataset(
+            headers=dataset.headers,
+            *[
+                [v if v is not None else "" for v in row.values()]
+                for row in dataset.dict
+                if any(v is not None and v != "" for v in row.values())
+            ],
+        )
+        return super().import_data(dataset=clean_dataset, **kwargs)
 
     def import_field(self, field, obj, data, is_m2m=False, **kwargs):
         if not field.attribute:
