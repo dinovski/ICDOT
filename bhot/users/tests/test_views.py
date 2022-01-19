@@ -11,11 +11,7 @@ from django.urls import reverse
 from bhot.users.forms import UserChangeForm
 from bhot.users.models import User
 from bhot.users.tests.factories import UserFactory
-from bhot.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from bhot.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 
