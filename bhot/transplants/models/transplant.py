@@ -17,6 +17,10 @@ class Transplant(UserScopedModel):
         FEMALE = "F", _("Female")
         OTHER = "O", _("Other")
 
+    class DonorCriteria(models.TextChoices):
+        SCD = "SCD", _("Standard Donor Criteria")
+        ECD = "ECD", _("Expanded Donor Criteria")
+
     # Main information
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -29,6 +33,11 @@ class Transplant(UserScopedModel):
     donor_sex = models.CharField(
         max_length=1,
         choices=Sex.choices,
+        blank=True,
+    )
+    donor_criteria = models.CharField(
+        max_length=100,
+        choices=DonorCriteria.choices,
         blank=True,
     )
 
