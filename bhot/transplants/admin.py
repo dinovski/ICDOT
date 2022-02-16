@@ -1,4 +1,8 @@
+import urllib
+
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from import_export.admin import ImportExportModelAdmin
 
 from bhot.transplants import forms, models, resources
@@ -23,6 +27,22 @@ class HistologyAdmin(ImportExportModelAdmin):
 class SequencingDataAdmin(ImportExportModelAdmin):
     resource_class = resources.SequencingDataResource
     readonly_fields = ("file_path",)
+    change_form_template = "transplants/sequencing_change_form.html"
+
+    def response_change(self, request, obj):
+        if "_save-and-file-upload" in request.POST:
+            url = reverse("admin:transplants_fileupload_add")
+            query_string = query_string = urllib.parse.urlencode(
+                {"file_ref": obj.file_ref}
+            )
+            return HttpResponseRedirect(f"{url}?{query_string}")
+        return super().response_change(request, obj)
+
+
+@admin.register(models.FileUpload)
+class FileUploadAdmin(admin.ModelAdmin):
+    model = models.FileUpload
+    readonly_fields = ("batch",)
 
 
 class FileUploadInline(admin.TabularInline):
