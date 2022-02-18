@@ -1,4 +1,5 @@
 import pytest
+from django.core.exceptions import ValidationError
 
 from bhot.utils.import_export import (
     ModelResourceWithMultiFieldImport,
@@ -29,6 +30,9 @@ TEST_DATA = (
 
 @pytest.fixture
 def setup_models():
+    Author.objects.all().delete()
+    Book.objects.all().delete()
+    Review.objects.all().delete()
     for entry in TEST_DATA:
         author, _ = Author.objects.get_or_create(
             first_name=entry["first_name"], last_name=entry["last_name"]
@@ -37,6 +41,46 @@ def setup_models():
             author=author, title=entry["title"], desc=entry["desc"]
         )
         review, _ = Review.objects.get_or_create(book=book, content=entry["content"])
+
+
+@pytest.fixture
+def review_resource():
+    class AuthorResource(ModelResourceWithMultiFieldImport):
+        class Meta:
+            model = Author
+            exclude = ["id"]
+            clean_model_instances = True
+            import_id_fields = ["first_name", "last_name"]
+
+    class BookResource(ModelResourceWithMultiFieldImport):
+        class Meta:
+            model = Book
+            exclude = ["id", "author"]
+            clean_model_instances = True
+            import_id_fields = ["author", "title"]
+
+        author = MultiFieldImportField(
+            resource_class=AuthorResource,
+            attribute="author",
+        )
+        first_name, last_name = author.get_id_fields()
+
+    class ReviewResource(ModelResourceWithMultiFieldImport):
+        class Meta:
+            model = Review
+            exclude = ["id", "book"]
+            clean_model_instances = True
+            import_id_fields = ["book"]  # This means only one review per book.
+            # That's kind of weird but it's a test, whatever.
+
+        book = MultiFieldImportField(
+            resource_class=BookResource,
+            attribute="book",
+        )
+        author, title = book.get_id_fields()
+        first_name, last_name = author.get_id_fields()
+
+    return ReviewResource()
 
 
 def test_validating_model_instance_loader(setup_models):
@@ -57,68 +101,64 @@ def test_validating_model_instance_loader(setup_models):
     assert len(instances) == len(TEST_DATA)
 
 
-def test_import_export_works(setup_models):
-    class AuthorResource(ModelResourceWithMultiFieldImport):
-        class Meta:
-            model = Author
-            exclude = ["id"]
-            import_id_fields = ["first_name", "last_name"]
-
-    class BookResource(ModelResourceWithMultiFieldImport):
-        class Meta:
-            model = Book
-            exclude = ["id", "author"]
-            import_id_fields = ["author", "title"]
-
-        author = MultiFieldImportField(
-            resource_class=AuthorResource,
-            attribute="author",
-        )
-        first_name, last_name = author.get_id_fields()
-
-    class ReviewResource(ModelResourceWithMultiFieldImport):
-        class Meta:
-            model = Review
-            exclude = ["id", "book"]
-            import_id_fields = ["book"]  # This means only one review per book.
-            # That's kind of weird but it's a test, whatever.
-
-        book = MultiFieldImportField(
-            resource_class=BookResource,
-            attribute="book",
-        )
-        author, title = book.get_id_fields()
-        first_name, last_name = author.get_id_fields()
-
-    # Check that export is working.
-
-    dataset = ReviewResource().export()
+def test_export(setup_models, review_resource):
+    dataset = review_resource.export()
     assert len(dataset) == len(TEST_DATA)
     for test in TEST_DATA:
         # "desc" is the only thing we do not expect to see in the review data.
         expected = {k: v for k, v in test.items() if k != "desc"}
         assert any(expected == dict(r) for r in dataset.dict)
 
-    # Check that import is working.
 
-    # Change on cell.
+def test_import(setup_models, review_resource):
+    dataset = review_resource.export()
+    # Change one cell.
     dataset[0] = tuple("new content" if x == "content" else x for x in dataset[0])
-    result = ReviewResource().import_data(dataset, raise_errors=True, dry_run=False)
+    result = review_resource.import_data(dataset, raise_errors=True, dry_run=False)
     assert result.total_rows == len(TEST_DATA)  # both books have been updated.
     assert Book.objects.count() == len(TEST_DATA)  # nothing has been created.
     assert Review.objects.get(book__author__first_name="foo").content == "new content"
 
+
+def test_import_with_missing_column(setup_models, review_resource):
+    dataset = review_resource.export()
     # Update with a missing column, we expect data not to change.
     del dataset["content"]
-    result = ReviewResource().import_data(dataset, raise_errors=True, dry_run=False)
+    result = review_resource.import_data(dataset, raise_errors=True, dry_run=False)
     assert result.total_rows == len(TEST_DATA)  # both books have been updated.
     assert Book.objects.count() == len(TEST_DATA)  # nothing has been created.
-    assert Review.objects.get(book__author__first_name="foo").content == "new content"
+    assert Review.objects.get(book__author__first_name="foo").content == "content"
 
+
+def test_import_with_missing_identifying_column(setup_models, review_resource):
+    dataset = review_resource.export()
     # If we remove a column used for id_fields we expect nothing to load.
     del dataset["first_name"]
-    with pytest.raises(ValueError):
-        result = ReviewResource().import_data(dataset, raise_errors=True, dry_run=False)
+    with pytest.raises(ValidationError):
+        review_resource.import_data(dataset, raise_errors=True, dry_run=False)
+
+
+def test_import_with_multiple_matches(setup_models, review_resource):
+    dataset = review_resource.export()
+    # If we create an ambiguity on authors we should see a failure.
+    Author.objects.create(
+        first_name=dataset["first_name"][0],
+        last_name=dataset["last_name"][0],
+    )
+    with pytest.raises(ValidationError):
+        review_resource.import_data(dataset, raise_errors=True, dry_run=False)
+
+
+def test_import_with_no_matching_reference(setup_models, review_resource):
+    dataset = review_resource.export()
+    # Review.objects.all().delete()
+    # # Re-creating the reviews should work.
+    # result = review_resource.import_data(dataset, raise_errors=True, dry_run=False)
+    Review.objects.all().delete()
+    Book.objects.all().delete()
+    # But now, without books. it should fail.
+    with pytest.raises(ValidationError):
+        review_resource.import_data(dataset, raise_errors=True, dry_run=False)
 
 
 def test_prefix():

@@ -11,32 +11,39 @@ class ValidatingModelInstanceLoader(instance_loaders.ModelInstanceLoader):
     Lookup for model instance by ``import_id_fields``.
     """
 
-    def _get_instance(self, row):
-        errors = {}
+    def _get_params(self, row):
         params = {}
+        errors = {}
+
         for key in self.resource.get_import_id_fields():
             field = self.resource.fields[key]
             try:
                 params[field.attribute] = field.clean(row)
             except ValueError as e:
                 errors[field.attribute] = ValidationError(force_str(e), code="invalid")
+
         if errors:
             raise ValidationError(errors)
-        if not params:
-            return None
+
+        return params
+
+    def _get_instance(self, params):
         try:
             return self.get_queryset().get(**params)
         except self.resource._meta.model.MultipleObjectsReturned:
             raise ValidationError(
                 f"More than one {self.resource._meta.model.__name__} match this row."
             )
+        except self.resource._meta.model.DoesNotExist:
+            raise ValidationError(
+                f"No {self.resource._meta.model.__name__} matched this row."
+                f" We searched using {params}."
+            )
 
     def get_instance(self, row):
         """Return a mathing instance or None."""
-        try:
-            return self._get_instance(row)
-        except self.resource._meta.model.DoesNotExist:
-            return None
+        params = self._get_params(row)
+        return self._get_instance(params)
 
 
 class MultiFieldImportField(fields.Field):
@@ -78,7 +85,30 @@ class MultiFieldImportField(fields.Field):
         )
 
 
-class ModelResourceWithMultiFieldImport(resources.ModelResource):
+class ModelResourceSanityCheck(resources.ModelDeclarativeMetaclass):
+    def __new__(cls, clsname, bases, attrs):
+        def meta_with_default_attributes(base, defaults):
+            return type(
+                "Meta",
+                (base,),
+                {
+                    attribute: value
+                    for attribute, value in defaults.items()
+                    if not hasattr(base, attribute)
+                },
+            )
+
+        attrs["Meta"] = meta_with_default_attributes(
+            base=attrs.get("Meta", object),
+            defaults={"instance_loader_class": ValidatingModelInstanceLoader},
+        )
+
+        return super().__new__(cls, clsname, bases, attrs)
+
+
+class ModelResourceWithMultiFieldImport(
+    resources.ModelResource, metaclass=ModelResourceSanityCheck
+):
     """This ignores MultiFieldImportField in some of ModelResource's methods."""
 
     @staticmethod

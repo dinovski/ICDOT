@@ -2,7 +2,6 @@ from bhot.transplants.models import Biopsy, Histology, SequencingData, Transplan
 from bhot.utils.import_export import (
     ModelResourceWithMultiFieldImport,
     MultiFieldImportField,
-    ValidatingModelInstanceLoader,
 )
 
 # Because of django_scopes being in effect we do not need to add
@@ -14,7 +13,6 @@ class TransplantResource(ModelResourceWithMultiFieldImport):
     class Meta:
         model = Transplant
         exclude = [f.name for f in model._meta.fields if not f.editable]
-        instance_loader_class = ValidatingModelInstanceLoader
         clean_model_instances = True
         import_id_fields = ["transplant_date", "donor_ref", "recipient_ref"]
 
@@ -23,7 +21,6 @@ class BiopsyResource(ModelResourceWithMultiFieldImport):
     class Meta:
         model = Biopsy
         exclude = [f.name for f in model._meta.fields if not f.editable]
-        instance_loader_class = ValidatingModelInstanceLoader
         clean_model_instances = True
         import_id_fields = ["transplant", "biopsy_date"]
 
@@ -38,7 +35,6 @@ class HistologyResource(ModelResourceWithMultiFieldImport):
     class Meta:
         model = Histology
         exclude = [f.name for f in model._meta.fields if not f.editable]
-        instance_loader_class = ValidatingModelInstanceLoader
         clean_model_instances = True
         import_id_fields = ["biopsy", "histology_date"]
 
@@ -54,7 +50,6 @@ class SequencingDataResource(ModelResourceWithMultiFieldImport):
     class Meta:
         model = SequencingData
         exclude = [f.name for f in model._meta.fields if not f.editable]
-        instance_loader_class = ValidatingModelInstanceLoader
         clean_model_instances = True
         import_id_fields = ["biopsy", "sequencing_date"]
 
