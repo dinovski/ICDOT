@@ -22,3 +22,4 @@ django-import-export==2.7.0  # https://github.com/django-import-export/django-im
 django-admin-interface==0.18.3  # https://github.com/fabiocaccamo/django-admin-interface
 django-markwhat==1.6.2  # https://github.com/Alir3z4/django-markwhat
 django-loginas==0.3.10  # https://github.com/skorokithakis/django-loginas
+django-nonrelated-inlines==0.1.1  # https://github.com/bhomnick/django-nonrelated-inlines

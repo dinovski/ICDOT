@@ -1,5 +1,7 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from nonrelated_inlines.forms import NonrelatedInlineFormSet
 
 from .models import FileUpload, FileUploadBatch
 
@@ -27,3 +29,18 @@ class FileUploadBatchAdminForm(forms.ModelForm):
         # actually being called. Keep it stand alone.
         for upload in self.files.getlist("files"):
             FileUpload(batch=batch, file_path=upload, file_ref=upload.name).save()
+
+
+class FileUploadInlineFormSet(NonrelatedInlineFormSet):
+    def _has_changed_forms(self):
+        for i, form in enumerate(self.forms):
+            had_initial_data = i < self.initial_form_count()
+            # Empty forms are unchanged forms beyond those with initial data.
+            if form.has_changed() and (had_initial_data or form.data):
+                return True
+        return False
+
+    def clean(self):
+        if self._has_changed_forms() and not self.instance.file_ref:
+            raise ValidationError(_("There is no file ref to work with."))
+        return super().clean()

@@ -1,9 +1,6 @@
-import urllib
-
 from django.contrib import admin
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from import_export.admin import ImportExportModelAdmin
+from nonrelated_inlines.admin import NonrelatedStackedInline
 
 from bhot.transplants import forms, models, resources
 
@@ -23,26 +20,9 @@ class HistologyAdmin(ImportExportModelAdmin):
     resource_class = resources.HistologyResource
 
 
-@admin.register(models.SequencingData)
-class SequencingDataAdmin(ImportExportModelAdmin):
-    resource_class = resources.SequencingDataResource
-    readonly_fields = ("file_path",)
-    change_form_template = "transplants/sequencing_change_form.html"
-
-    def response_change(self, request, obj):
-        if "_save-and-file-upload" in request.POST:
-            url = reverse("admin:transplants_fileupload_add")
-            query_string = query_string = urllib.parse.urlencode(
-                {"file_ref": obj.file_ref}
-            )
-            return HttpResponseRedirect(f"{url}?{query_string}")
-        return super().response_change(request, obj)
-
-
 @admin.register(models.FileUpload)
-class FileUploadAdmin(admin.ModelAdmin):
-    model = models.FileUpload
-    readonly_fields = ("batch",)
+class FileUploadAdmin(ImportExportModelAdmin):
+    pass
 
 
 class FileUploadInline(admin.TabularInline):
@@ -63,3 +43,26 @@ class FileUploadBatchAdmin(admin.ModelAdmin):
         # We must call the save_files method manually.
         super().save_related(request, form, formsets, change)
         form.save_files(form.instance)
+
+
+class StackedFileUploadInline(NonrelatedStackedInline):
+    model = models.FileUpload
+    exclude = ("batch", "file_ref")
+    max_num = 1
+    formset = forms.FileUploadInlineFormSet
+
+    def get_form_queryset(self, obj):
+        # We want this to act like a "quick upload form".
+        # We do not attempt to manage the referenced file (eg: editing.)
+        # That is why we always return an empty queryset.
+        return self.model.objects.none()
+
+    def save_new_instance(self, parent, instance):
+        instance.file_ref = parent.file_ref
+
+
+@admin.register(models.SequencingData)
+class SequencingDataAdmin(ImportExportModelAdmin):
+    resource_class = resources.SequencingDataResource
+    readonly_fields = ("file_path",)
+    inlines = [StackedFileUploadInline]
