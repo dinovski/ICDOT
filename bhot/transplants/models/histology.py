@@ -11,7 +11,7 @@ class Histology(UserScopedModel):
     class Meta:
         verbose_name_plural = "histologies"
 
-    class BanffScore(models.textChoices):
+    class BanffScore(models.TextChoices):
         ZERO = "0", _("0")
         ONE = "1", _("1")
         TWO = "2", _("2")
@@ -35,23 +35,32 @@ class Histology(UserScopedModel):
     # variables
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     biopsy = models.ForeignKey(Biopsy, null=True, on_delete=models.SET_NULL)
-    transplant_date = models.DateField()
-    biopsy_date = models.DateField()
+    transplant_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    biopsy_date = models.DateField(
+        blank=True,
+        null=True,
+    )
 
     biopsy_assessment = models.CharField(
+        max_length=100,
         choices=BiopsyAssessment.choices,
         blank=True,
-        NULL=True,
+        null=True,
     )
     biopsy_method = models.CharField(
+        max_length=100,
         choices=BiopsyMethod.choices,
         blank=True,
-        NULL=True,
+        null=True,
     )
     tissue_technique = models.CharField(
+        max_length=100,
         choices=TissueTechnique.choices,
         blank=True,
-        NULL=True,
+        null=True,
     )
     num_cores = models.IntegerField(
         blank=True,
@@ -90,37 +99,43 @@ class Histology(UserScopedModel):
         verbose_name="Thrombotic Microangiopathy",
     )
 
-    g_score = models.CharFiles(
+    g_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
         verbose_name="glomerulitis (g)",
     )
-    ptc_score = models.CharFiles(
+    ptc_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
         verbose_name="peritubular capillaritis (ptc)",
     )
-    i_score = models.CharFiles(
+    i_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
         verbose_name="interstitial inflammation (i)",
     )
-    t_score = models.CharFiles(
+    t_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
         verbose_name="tubulitis (t)",
     )
-    v_score = models.CharFiles(
+    v_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
         verbose_name="intimal arteritis (v)",
     )
-    cg_score = models.CharFiles(
+    cg_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,

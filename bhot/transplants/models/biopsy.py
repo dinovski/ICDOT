@@ -37,11 +37,11 @@ class Biopsy(UserScopedModel):
         UMOL_L = "umol/L", _("umol/L")
 
     class CreatinuriaUnits(models.TextChoices):
-        MMOL_L = "mol/L", _("umol/L")
+        UMOL_L = "umol/L", _("umol/L")
 
     class ProteinuriaUnits(models.TextChoices):
         G_G = "g/g", _("g/g")
-        G_24H = "g/g", _("g/g")
+        G_24H = "g/24h", _("g/24h")
         MG_DL = "mg/dL", _("mg/dL")
         G_L = "g/L", _("g/L")
         MG_MMOL = "mg/mmol", _("mg/mmol")
@@ -102,7 +102,7 @@ class Biopsy(UserScopedModel):
         DQ = "DQ", _("DQ")
         DP = "DP", _("DP")
 
-    class nonAntiHlaDsa(models.textChoices):
+    class nonAntiHlaDsa(models.TextChoices):
         AT1R = "AT1R", _("AT1R")
         MICA = "MICA", _("MICA")
         ECXM = "ECXM", _("ECXM")
@@ -112,13 +112,13 @@ class Biopsy(UserScopedModel):
         TUBULIN = "tubulin", _("tubulin")
         # other:specify
 
-    class BanffScore(models.textChoices):
+    class BanffScore(models.TextChoices):
         ZERO = "0", _("0")
         ONE = "1", _("1")
         TWO = "2", _("2")
         THREE = "3", _("3")
 
-    class GraftFailureCause(models.textChoices):
+    class GraftFailureCause(models.TextChoices):
         DEATH = "death", _("death")
         INFECTION = "infection", _("infection")
         RECURRENT_DISEASE = "recurrent disease", _("recurrent disease")
@@ -127,7 +127,10 @@ class Biopsy(UserScopedModel):
     # Main info
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
-    transplant_date = models.DateField()
+    transplant_date = models.DateField(
+        null=True,
+        blank=True,
+    )
     biopsy_date = models.DateField()
     biopsy_type = models.CharField(
         max_length=100,
@@ -143,41 +146,57 @@ class Biopsy(UserScopedModel):
         blank=True,
         null=True,
     )
-    biopsy_creatinemia_units = models.CharFiles(
+    biopsy_creatinemia_units = models.CharField(
+        max_length=50,
+        default=CreatinemiaUnits.MG_DL,
         choices=CreatinemiaUnits.choices,
     )
     biopsy_creatinuria = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_creatinuria_units = models.CharFiles(
+    biopsy_creatinuria_units = models.CharField(
+        max_length=50,
+        default=CreatinuriaUnits.UMOL_L,
         choices=CreatinuriaUnits.choices,
     )
     biopsy_proteinuria = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_proteinuria_units = models.CharFiles(
+    biopsy_proteinuria_units = models.CharField(
+        max_length=50,
+        default=ProteinuriaUnits.MG_DL,
         choices=ProteinuriaUnits.choices,
     )
     biopsy_proteinuria_dipstick = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_proteinuria_dipstick_units = models.FloatField(
+    biopsy_proteinuria_dipstick_units = models.CharField(
+        max_length=50,
+        default=ProtDipstickUnits.MG_DL_RANGE,
         choices=ProtDipstickUnits.choices,
     )
-    biopsy_proteinuria_date = models.DateField()
+    biopsy_proteinuria_date = models.DateField(
+        blank=True,
+        null=True,
+    )
     biopsy_prot_creat_ratio = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(30.0)],
         blank=True,
         null=True,
         verbose_name="Protein/creatinine ratio (g/g)",
     )
-    biopsy_prot_creat_ratio_units = models.CharFiles(
+    biopsy_prot_creat_ratio_units = models.CharField(
+        max_length=50,
+        default=ProtCreatRatioUnits.G_G,
         choices=ProtCreatRatioUnits.choices,
     )
-    biopsy_immunosuppressants = models.CharFiles(
+    biopsy_immunosuppressants = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
         choices=Immunosuppressants.choices,
         verbose_name="Immunosuppresants",
     )
@@ -192,20 +211,28 @@ class Biopsy(UserScopedModel):
         null=True,
         verbose_name="immunosuppressant postdose level: C2 (ng/mL)",
     )
-    biopsy_rejection_treatment = models.CharFiles(
+    biopsy_rejection_treatment = models.CharField(
+        max_length=100,
         choices=BxRejectionTreatment.choices,
         blank=True,
         null=True,
         verbose_name="rejection treatment",
     )
-    biopsy_treatment_start_date = models.DateField()  # link to treatment
-    biopsy_treatment_response = models.CharFiles(
+    biopsy_treatment_start_date = models.DateField(
+        blank=True,
+        null=True,
+    )  # link to treatment
+    biopsy_treatment_response = models.CharField(
+        max_length=100,
         choices=BxRejectionTreatmentResponse.choices,
         blank=True,
         null=True,
         verbose_name="Rejection treatment response",
     )
-    biopsy_rejection_date = models.DateField()
+    biopsy_rejection_date = models.DateField(
+        blank=True,
+        null=True,
+    )
     biopsy_dd_cf_dna = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
         blank=True,
@@ -236,10 +263,16 @@ class Biopsy(UserScopedModel):
         blank=True,
         null=True,
     )  # add choices: de novo/persistent
-    immunodominant_dsa_class = models.CharFiles(
+    immunodominant_dsa_class = models.CharField(
+        blank=True,
+        null=True,
+        max_length=50,
         choices=iDSAclass.choices,
     )
-    i_dsa_specificity = models.CharFiles(
+    i_dsa_specificity = models.CharField(
+        blank=True,
+        null=True,
+        max_length=50,
         choices=iDSAspecifiity.choices,
     )
     i_dsa_mfi = models.IntegerField(
@@ -249,31 +282,46 @@ class Biopsy(UserScopedModel):
     )
     c1q_binding = models.BooleanField(blank=True, null=True, verbose_name="C1q binding")
     non_anti_hla_dsa = models.BooleanField(
-        blank=True, null=True, verbose_name="non anti-HLA DSA"
+        blank=True,
+        null=True,
+        verbose_name="non anti-HLA DSA",
     )
-    non_anti_hla_dsa_type = models.CharFiles(
+    non_anti_hla_dsa_type = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
         choices=nonAntiHlaDsa.choices,
     )
-    graft_failure_cause = models.CharFiles(
+    graft_failure_cause = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
         choices=GraftFailureCause.choices,
     )
-    graft_failure_date = models.DateField()
-    ci_score = models.CharFiles(
+    graft_failure_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    ci_score = models.CharField(
+        max_length=100,
         choices=BanffScore.choices,
         blank=True,
         null=True,
     )
-    ct_score = models.CharFiles(
+    ct_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
     )
-    cv_score = models.CharFiles(
+    cv_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         blank=True,
         null=True,
     )
-    ah_score = models.CharFiles(
+    ah_score = models.CharField(
+        max_length=1,
         choices=BanffScore.choices,
         null=True,
     )

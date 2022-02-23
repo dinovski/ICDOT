@@ -25,7 +25,7 @@ class Transplant(UserScopedModel):
     # set general class for units; assign to specific models (eg. donor_proteinuria_units)
     class ProteinuriaUnits(models.TextChoices):
         G_G = "g/g", _("g/g")
-        G_24H = "g/g", _("g/g")
+        G_24H = "g/24h", _("g/24h")
         MG_DL = "mg/dL", _("mg/dL")
         G_L = "g/L", _("g/L")
         MG_MMOL = "mg/mmol", _("mg/mmol")
@@ -59,8 +59,10 @@ class Transplant(UserScopedModel):
         blank=True,
         null=True,
     )
-    donor_proteinuria_units = models.CharFiles(
+    donor_proteinuria_units = models.CharField(
+        max_length=50,
         choices=ProteinuriaUnits.choices,
+        default=ProteinuriaUnits.G_G,
     )
 
     # Recipient information
