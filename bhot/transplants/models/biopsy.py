@@ -127,10 +127,6 @@ class Biopsy(UserScopedModel):
     # Main info
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
-    transplant_date = models.DateField(
-        null=True,
-        blank=True,
-    )
     biopsy_date = models.DateField()
     biopsy_type = models.CharField(
         max_length=100,
@@ -196,7 +192,6 @@ class Biopsy(UserScopedModel):
     biopsy_immunosuppressants = models.CharField(
         max_length=100,
         blank=True,
-        null=True,
         choices=Immunosuppressants.choices,
         verbose_name="Immunosuppresants",
     )
@@ -215,7 +210,6 @@ class Biopsy(UserScopedModel):
         max_length=100,
         choices=BxRejectionTreatment.choices,
         blank=True,
-        null=True,
         verbose_name="rejection treatment",
     )
     biopsy_treatment_start_date = models.DateField(
@@ -226,7 +220,6 @@ class Biopsy(UserScopedModel):
         max_length=100,
         choices=BxRejectionTreatmentResponse.choices,
         blank=True,
-        null=True,
         verbose_name="Rejection treatment response",
     )
     biopsy_rejection_date = models.DateField(
@@ -265,13 +258,11 @@ class Biopsy(UserScopedModel):
     )  # add choices: de novo/persistent
     immunodominant_dsa_class = models.CharField(
         blank=True,
-        null=True,
         max_length=50,
         choices=iDSAclass.choices,
     )
     i_dsa_specificity = models.CharField(
         blank=True,
-        null=True,
         max_length=50,
         choices=iDSAspecifiity.choices,
     )
@@ -289,13 +280,11 @@ class Biopsy(UserScopedModel):
     non_anti_hla_dsa_type = models.CharField(
         max_length=100,
         blank=True,
-        null=True,
         choices=nonAntiHlaDsa.choices,
     )
     graft_failure_cause = models.CharField(
         max_length=100,
         blank=True,
-        null=True,
         choices=GraftFailureCause.choices,
     )
     graft_failure_date = models.DateField(
@@ -306,24 +295,21 @@ class Biopsy(UserScopedModel):
         max_length=100,
         choices=BanffScore.choices,
         blank=True,
-        null=True,
     )
     ct_score = models.CharField(
         max_length=1,
         choices=BanffScore.choices,
         blank=True,
-        null=True,
     )
     cv_score = models.CharField(
         max_length=1,
         choices=BanffScore.choices,
         blank=True,
-        null=True,
     )
     ah_score = models.CharField(
         max_length=1,
         choices=BanffScore.choices,
-        null=True,
+        blank=True,
     )
     percent_glomerulosclerosis = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
