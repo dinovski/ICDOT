@@ -2,7 +2,7 @@ from django.apps import apps
 from django.db import models
 
 
-def test_models_do_not_use_confusing_char_fields():
+def _test_models_do_not_use_confusing_char_fields():
     for model in apps.get_app_config("transplants").get_models():
         for field in model._meta.get_fields():
             if not isinstance(field, models.CharField):

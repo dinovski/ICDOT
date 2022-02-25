@@ -12,11 +12,11 @@ class Biopsy(UserScopedModel):
     class Meta:
         verbose_name_plural = "biopsies"
 
-    class BiopsyType(models.TextChoices):
-        PROCUREMENT = "procurement", _("procurement")
-        PRE_IMPLANT = "pre-implantation", _("pre-implantation")
+    class PreTransplantBiopsyType(models.TextChoices):
+        PRE_IMPLANT = "preimplantation", _("preimplantation")
+        PROCUREMENT = "procurement", _("procurementt")
 
-    class BiopsyIndication(models.TextChoices):
+    class ClinicalBiopsyIndication(models.TextChoices):
         PROTOCOL = "protocol", _("protocol")
         DGF = "DGF", _("Delayed Graft Function")
         SD = "Slow deterioration", _(
@@ -25,19 +25,19 @@ class Biopsy(UserScopedModel):
         ARF = "ARF", _("Acute renal failure")
         PROT_U = "Proteinuria", _("Proteinuria")
         HEMATURIA = "Hematuria", _("Hematuria")
-        SAR = "SAR", _("Suspicious for acute rejection")
-        SPVN = "SPVN", _("Suspicious for Polyoma Virus Nephropathy")
+        SUSP_AR = "SUSP_AR", _("Suspicious for acute rejection")
+        SUSP_PVN = "SUSP_PVN", _("Suspicious for Polyoma Virus Nephropathy")
         TRANSPLANTECTOMY = "Transplantectomy", _("Transplantectomy biopsy")
         DENOVO_DSA = "de novo DSA", _("de novo DSA")
         FOLLOWUP = "Follow-up", _("Follow-up from previous biopsy")
         # other:specify
 
     class CreatinemiaUnits(models.TextChoices):
-        MG_DL = "mg/dL", _("mg/dL")
         UMOL_L = "umol/L", _("umol/L")
+        MG_L = "mg/L", _("mgdL")
 
     class CreatinuriaUnits(models.TextChoices):
-        UMOL_L = "umol/L", _("umol/L")
+        MMOL_L = "mmol/L", _("mmol/L")
 
     class ProteinuriaUnits(models.TextChoices):
         G_G = "g/g", _("g/g")
@@ -72,6 +72,13 @@ class Biopsy(UserScopedModel):
         SIROLIMUS = "Sirolimus", _("Azathioprine")
         TACROLIMUS = "Tacrolimus", _("Tacrolimus")
         # other:specify
+
+    class ImmunosuppressantDoseUnits(models.TextChoices):
+        MG_DAY = "mg/day", _("mg/day")
+        MG_2X_DAY = "mg twice per day", _("mg twice per day")
+        MG_WEEK = "mg per week", _("mg per week")
+        MG_15_DAYS = "mg per 15 days", _("mg per 15 days")
+        # other:free text
 
     class BxRejectionTreatment(models.TextChoices):
         ALEMTUZUMAB = "Alemtuzumab", _("Alemtuzumab")
@@ -112,12 +119,6 @@ class Biopsy(UserScopedModel):
         TUBULIN = "tubulin", _("tubulin")
         # other:specify
 
-    class BanffScore(models.TextChoices):
-        ZERO = "0", _("0")
-        ONE = "1", _("1")
-        TWO = "2", _("2")
-        THREE = "3", _("3")
-
     class GraftFailureCause(models.TextChoices):
         DEATH = "death", _("death")
         INFECTION = "infection", _("infection")
@@ -128,14 +129,15 @@ class Biopsy(UserScopedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
     biopsy_date = models.DateField()
-    biopsy_type = models.CharField(
+
+    pre_transplant_biopsy_type = models.CharField(
         max_length=100,
-        choices=BiopsyType.choices,
+        choices=PreTransplantBiopsyType.choices,
         blank=True,
     )
-    biopsy_indication = models.CharField(
+    clinical_biopsy_indication = models.CharField(
         max_length=100,
-        choices=BiopsyIndication.choices,
+        choices=ClinicalBiopsyIndication.choices,
         blank=True,
     )
     biopsy_creatinemia = models.FloatField(
@@ -144,7 +146,7 @@ class Biopsy(UserScopedModel):
     )
     biopsy_creatinemia_units = models.CharField(
         max_length=50,
-        default=CreatinemiaUnits.MG_DL,
+        default=CreatinemiaUnits.UMOL_L,
         choices=CreatinemiaUnits.choices,
     )
     biopsy_creatinuria = models.FloatField(
@@ -153,7 +155,7 @@ class Biopsy(UserScopedModel):
     )
     biopsy_creatinuria_units = models.CharField(
         max_length=50,
-        default=CreatinuriaUnits.UMOL_L,
+        default=CreatinuriaUnits.MMOL_L,
         choices=CreatinuriaUnits.choices,
     )
     biopsy_proteinuria = models.FloatField(
@@ -165,9 +167,9 @@ class Biopsy(UserScopedModel):
         default=ProteinuriaUnits.MG_DL,
         choices=ProteinuriaUnits.choices,
     )
-    biopsy_proteinuria_dipstick = models.FloatField(
+    biopsy_proteinuria_dipstick = models.CharField(
+        max_length=20,
         blank=True,
-        null=True,
     )
     biopsy_proteinuria_dipstick_units = models.CharField(
         max_length=50,
@@ -195,11 +197,16 @@ class Biopsy(UserScopedModel):
         choices=Immunosuppressants.choices,
         verbose_name="Immunosuppresants",
     )
-    # imunosuppressant dose
+    biopsy_immunosuppressant_dose = models.FloatField(
+        blank=True,
+        null=True,
+        choices=ImmunosuppressantDoseUnits.choices,
+        verbose_name="Immunosuppresant dose",
+    )  # link immunosuppressant to dose (+ sign to add med + dose)
     biopsy_immunosuppressant_c0 = models.FloatField(
         blank=True,
         null=True,
-        verbose_name="immunosuppressant trough level:C0 (ng/mL)",
+        verbose_name="Immunosuppressant trough level:C0 (ng/mL)",
     )
     biopsy_immunosuppressant_c0 = models.FloatField(
         blank=True,
@@ -291,24 +298,20 @@ class Biopsy(UserScopedModel):
         blank=True,
         null=True,
     )
-    ci_score = models.CharField(
-        max_length=100,
-        choices=BanffScore.choices,
+    ci_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
     )
-    ct_score = models.CharField(
-        max_length=1,
-        choices=BanffScore.choices,
+    ct_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
     )
-    cv_score = models.CharField(
-        max_length=1,
-        choices=BanffScore.choices,
+    cv_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
     )
-    ah_score = models.CharField(
-        max_length=1,
-        choices=BanffScore.choices,
+    ah_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
     )
     percent_glomerulosclerosis = models.FloatField(
