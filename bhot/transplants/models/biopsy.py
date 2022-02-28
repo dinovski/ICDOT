@@ -128,8 +128,8 @@ class Biopsy(UserScopedModel):
     # Main info
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
+    # transplant date?
     biopsy_date = models.DateField()
-
     pre_transplant_biopsy_type = models.CharField(
         max_length=100,
         choices=PreTransplantBiopsyType.choices,
@@ -170,6 +170,7 @@ class Biopsy(UserScopedModel):
     biopsy_proteinuria_dipstick = models.CharField(
         max_length=20,
         blank=True,
+        choices=ProtDipstick.choices,
     )
     biopsy_proteinuria_dipstick_units = models.CharField(
         max_length=50,
@@ -203,12 +204,12 @@ class Biopsy(UserScopedModel):
         choices=ImmunosuppressantDoseUnits.choices,
         verbose_name="Immunosuppresant dose",
     )  # link immunosuppressant to dose (+ sign to add med + dose)
-    biopsy_immunosuppressant_c0 = models.FloatField(
+    biopsy_immunosuppressant_trough = models.FloatField(
         blank=True,
         null=True,
         verbose_name="Immunosuppressant trough level:C0 (ng/mL)",
     )
-    biopsy_immunosuppressant_c0 = models.FloatField(
+    biopsy_immunosuppressant_postdose = models.FloatField(
         blank=True,
         null=True,
         verbose_name="immunosuppressant postdose level: C2 (ng/mL)",
@@ -257,28 +258,40 @@ class Biopsy(UserScopedModel):
     dsa_at_biopsy = models.BooleanField(
         blank=True,
         null=True,
+        verbose_name="DSA at time of biopsy",
     )
-    preformed_dsa = models.BooleanField(blank=True, null=True)
+    preformed_dsa = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="pre-formed DSA",
+    )
     history_dsa = models.BooleanField(
         blank=True,
         null=True,
-    )  # add choices: de novo/persistent
+        verbose_name="history of DSA",
+    )
     immunodominant_dsa_class = models.CharField(
         blank=True,
         max_length=50,
         choices=iDSAclass.choices,
+        verbose_name="iDSA class",
     )
     i_dsa_specificity = models.CharField(
         blank=True,
         max_length=50,
         choices=iDSAspecifiity.choices,
+        verbose_name="iDSA specificity",
     )
     i_dsa_mfi = models.IntegerField(
         blank=True,
         null=True,
         verbose_name="iDSA MFI",
     )
-    c1q_binding = models.BooleanField(blank=True, null=True, verbose_name="C1q binding")
+    c1q_binding = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="C1q binding",
+    )
     non_anti_hla_dsa = models.BooleanField(
         blank=True,
         null=True,
