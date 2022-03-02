@@ -28,7 +28,7 @@ class SequencingData(UserScopedModel, TrackFileUploadModel):
         choices=RunProtocol.choices,
     )
     rna_concentration = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(1000.0)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(10000.0)],
         blank=True,
         null=True,
         verbose_name="RNA concentration (ng/ul)",
@@ -40,7 +40,13 @@ class SequencingData(UserScopedModel, TrackFileUploadModel):
         verbose_name="RNA Integrity Number",
     )
     # RCC file
-    file_name = models.CharField(max_length=256, blank=False)
-    file_path = models.FileField(null=True, editable=False)
+    file_ref = models.CharField(
+        max_length=256,
+        blank=False,
+    )
+    file_path = models.FileField(
+        null=True,
+        editable=False,
+    )
 
-    TRACK_FILE_UPLOAD = {"file_name": "file_path"}
+    TRACK_FILE_UPLOAD = {"file_ref": "file_path"}

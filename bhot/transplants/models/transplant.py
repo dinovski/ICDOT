@@ -324,7 +324,10 @@ class Transplant(UserScopedModel):
         verbose_name="delayed graft function time",
     )
     induction_therapy = models.CharField(
-        blank=True, choices=InductionTherapy.choices, verbose_name="induction therapy"
+        max_length=100,
+        blank=True,
+        choices=InductionTherapy.choices,
+        verbose_name="induction therapy",
     )
     preformed_dsa = models.BooleanField(
         blank=True,
