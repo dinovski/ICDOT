@@ -339,71 +339,85 @@ class Histology(UserScopedModel):
     g_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="glomerulitis (g)",
     )
     ptc_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="peritubular capillaritis (ptc)",
     )
     i_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="interstitial inflammation (i)",
     )
     t_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="tubulitis (t)",
     )
     v_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="intimal arteritis (v)",
     )
     cg_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="Glomerular Basement Membrane double contours (cg)",
     )
     ci_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="interstitial fibrosis (ci)",
     )
     ct_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="tubular atrophy (ct)",
     )
     cv_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="vascular fibrous intimal thickening (cv))",
     )
     ah_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="artieriolar hyalinosis (ah)",
     )
     mm_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="mesangial matrix expansion (mm)",
     )
     ti_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="total inflammation (ti)",
     )
     i_ifta_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="inflammation in the area of IFTA (i-IFTA)",
     )
     t_ifta_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
         verbose_name="tubulitis in the area of IFTA (t-IFTA)",
     )
     percent_cortex_if = models.IntegerField(

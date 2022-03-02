@@ -140,117 +140,121 @@ class Biopsy(UserScopedModel):
         choices=ClinicalBiopsyIndication.choices,
         blank=True,
     )
-    biopsy_creatinemia = models.FloatField(
+    creatinemia = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_creatinemia_units = models.CharField(
+    creatinemia_units = models.CharField(
         max_length=50,
         default=CreatinemiaUnits.UMOL_L,
         choices=CreatinemiaUnits.choices,
     )
-    biopsy_creatinuria = models.FloatField(
+    creatinuria = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_creatinuria_units = models.CharField(
+    creatinuria_units = models.CharField(
         max_length=50,
         default=CreatinuriaUnits.MMOL_L,
         choices=CreatinuriaUnits.choices,
     )
-    biopsy_proteinuria = models.FloatField(
+    proteinuria = models.FloatField(
         blank=True,
         null=True,
     )
-    biopsy_proteinuria_units = models.CharField(
+    proteinuria_units = models.CharField(
         max_length=50,
         default=ProteinuriaUnits.MG_DL,
         choices=ProteinuriaUnits.choices,
     )
-    biopsy_proteinuria_dipstick = models.CharField(
+    proteinuria_dipstick = models.CharField(
         max_length=20,
         blank=True,
         choices=ProtDipstick.choices,
     )
-    biopsy_proteinuria_dipstick_units = models.CharField(
+    proteinuria_dipstick_units = models.CharField(
         max_length=50,
         default=ProtDipstickUnits.MG_DL_RANGE,
         choices=ProtDipstickUnits.choices,
     )
-    biopsy_proteinuria_date = models.DateField(
+    proteinuria_date = models.DateField(
         blank=True,
         null=True,
     )
-    biopsy_prot_creat_ratio = models.FloatField(
+    prot_creat_ratio = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(30.0)],
         blank=True,
         null=True,
         verbose_name="Protein/creatinine ratio (g/g)",
     )
-    biopsy_prot_creat_ratio_units = models.CharField(
+    prot_creat_ratio_units = models.CharField(
         max_length=50,
         default=ProtCreatRatioUnits.G_G,
         choices=ProtCreatRatioUnits.choices,
     )
-    biopsy_immunosuppressants = models.CharField(
+    immunosuppressants = models.CharField(
         max_length=100,
         blank=True,
         choices=Immunosuppressants.choices,
         verbose_name="Immunosuppresants",
     )
-    biopsy_immunosuppressant_dose = models.FloatField(
+    immunosuppressant_dose = models.FloatField(
         blank=True,
         null=True,
+    )
+    immunosuppressant_dose_units = models.CharField(
+        null=True,
+        max_length=100,
         choices=ImmunosuppressantDoseUnits.choices,
-        verbose_name="Immunosuppresant dose",
+        verbose_name="Immunosuppresant dose units",
     )  # link immunosuppressant to dose (+ sign to add med + dose)
-    biopsy_immunosuppressant_trough = models.FloatField(
+    immunosuppressant_trough = models.FloatField(
         blank=True,
         null=True,
         verbose_name="Immunosuppressant trough level:C0 (ng/mL)",
     )
-    biopsy_immunosuppressant_postdose = models.FloatField(
+    immunosuppressant_postdose = models.FloatField(
         blank=True,
         null=True,
         verbose_name="immunosuppressant postdose level: C2 (ng/mL)",
     )
-    biopsy_rejection_treatment = models.CharField(
+    rejection_treatment = models.CharField(
         max_length=100,
         choices=BxRejectionTreatment.choices,
         blank=True,
         verbose_name="rejection treatment",
     )
-    biopsy_treatment_start_date = models.DateField(
+    treatment_start_date = models.DateField(
         blank=True,
         null=True,
     )  # link to treatment
-    biopsy_treatment_response = models.CharField(
+    treatment_response = models.CharField(
         max_length=100,
         choices=BxRejectionTreatmentResponse.choices,
         blank=True,
         verbose_name="Rejection treatment response",
     )
-    biopsy_rejection_date = models.DateField(
+    rejection_date = models.DateField(
         blank=True,
         null=True,
     )
-    biopsy_dd_cf_dna = models.FloatField(
+    dd_cf_dna = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
         blank=True,
         null=True,
         verbose_name="Donor-derived cf-DNA (%)",
     )
-    biopsy_bkv_load = models.IntegerField(
+    bkv_load = models.IntegerField(
         blank=True,
         null=True,
         verbose_name="BKV load (copies/mL)",
     )
-    biopsy_cmv_load = models.IntegerField(
+    cmv_load = models.IntegerField(
         blank=True,
         null=True,
         verbose_name="CMV load (copies/mL)",
     )
-    biopsy_ebv_load = models.IntegerField(
+    ebv_load = models.IntegerField(
         blank=True,
         null=True,
         verbose_name="EBV load (copies/mL)",
@@ -314,18 +318,22 @@ class Biopsy(UserScopedModel):
     ci_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
     )
     ct_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
     )
     cv_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
     )
     ah_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
+        null=True,
     )
     percent_glomerulosclerosis = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],

@@ -312,6 +312,10 @@ class Transplant(UserScopedModel):
     cold_ischemia_time = models.FloatField(
         blank=True,
         null=True,
+    )
+    cold_ischemia_time_units = models.CharField(
+        blank=True,
+        max_length=50,
         choices=TimeUnits.choices,
     )
     delayed_graft_function = models.BooleanField(
