@@ -12,6 +12,22 @@ class Histology(UserScopedModel):
     class Meta:
         verbose_name_plural = "histologies"
 
+    class ClinicalBiopsyIndication(models.TextChoices):
+        PROTOCOL = "protocol", _("protocol")
+        DGF = "DGF", _("Delayed Graft Function")
+        SD = "slow deterioration", _(
+            "slow deterioration (progressive increase in serum creatinine over time)"
+        )
+        ARF = "ARF", _("Acute Renal Failure")
+        PROT_U = "proteinuria", _("proteinuria")
+        HEMATURIA = "hematuria", _("hematuria")
+        SUSP_AR = "SUSP_AR", _("Suspicious for acute rejection")
+        SUSP_PVN = "SUSP_PVN", _("Suspicious for Polyoma Virus Nephropathy")
+        TRANSPLANTECTOMY = "Transplantectomy", _("Transplantectomy biopsy")
+        DENOVO_DSA = "de novo DSA", _("de novo DSA")
+        FOLLOWUP = "follow-up", _("follow-up from previous biopsy")
+        # other:specify
+
     class BiopsyAssessment(models.TextChoices):
         FROZEN = "frozen", _("frozen")
         PARAFFIN = "paraffin", _("paraffin")
@@ -127,9 +143,7 @@ class Histology(UserScopedModel):
             "C4D deposition without morphologic evidence for active rejection"
         )
         # TCMR
-        BORDERLINE = "Borderline/Suspicious for acute TCMR", _(
-            "Borderline/Suspicious for acute TCMR"
-        )
+        BORDERLINE = "Borderline TCMR", _("Borderline/Suspicious for acute TCMR")
         ATCMR_IA = "acute TCMR IA", _("acute TCMR IA")
         ATCMR_IB = "acute TCMR IB", _("acute TCMR IB")
         ATCMR_IIA = "acute TCMR IIA", _("acute TCMR IIA")
@@ -264,7 +278,15 @@ class Histology(UserScopedModel):
     # variables
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     biopsy = models.ForeignKey(Biopsy, null=True, on_delete=models.SET_NULL)
-    histology_date = models.DateField()
+    
+    histology_date = models.DateField(
+        blank=True,
+    )
+    clinical_biopsy_indication = models.CharField(
+        max_length=100,
+        choices=ClinicalBiopsyIndication.choices,
+        blank=True,
+    )
     biopsy_assessment = models.CharField(
         max_length=100,
         choices=BiopsyAssessment.choices,
@@ -305,24 +327,24 @@ class Histology(UserScopedModel):
         null=True,
         verbose_name="number of arteries",
     )
+    biopsy_quality = models.CharField(
+        max_length=100,
+        blank=True,
+        choices=BiopsyQuality.choices,
+        verbose_name="Biopsy quality/adequacy",
+    )
     fsgs_type = models.CharField(
         max_length=100,
         blank=True,
         choices=FSGStype.choices,
         verbose_name="FSGS type",
     )
-    biopsy_quality = models.CharField(
-        max_length=100,
-        blank=True,
-        choices=BiopsyQuality.choices,
-        verbose_name="Biopsy quality",
-    )
-    ati = models.BooleanField(
+    ati_status = models.BooleanField(
         blank=True,
         null=True,
         verbose_name="Acute Tubular Injury (ATI)",
     )
-    tma = models.BooleanField(
+    tma_status = models.BooleanField(
         blank=True,
         null=True,
         verbose_name="Thrombotic Microangiopathy",
@@ -333,6 +355,8 @@ class Histology(UserScopedModel):
         blank=True,
         verbose_name="TMA location",
     )
+    # collapse: lesions
+    # header: acute lesions
     g_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
@@ -363,6 +387,7 @@ class Histology(UserScopedModel):
         null=True,
         verbose_name="intimal arteritis (v)",
     )
+    # header: chronic lesions
     cg_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
@@ -399,6 +424,7 @@ class Histology(UserScopedModel):
         null=True,
         verbose_name="mesangial matrix expansion (mm)",
     )
+    # header: acute_chronic_lesions
     ti_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
@@ -434,23 +460,17 @@ class Histology(UserScopedModel):
         null=True,
         verbose_name="chronic allograft arteriopathy",
     )
-    pvl_load = models.IntegerField(
+    pvl_load_level = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
         verbose_name="PVL (polyomavirus replication/load level)",
     )
-    mesangial_hypercellularity = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(1)],
-        blank=True,
-        null=True,
-        verbose_name="mesangial hypercellularity",
-    )
+    # collapse: immunohistochemsitry
     crescents = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(2)],
         blank=True,
         null=True,
-        verbose_name="mesangial hypercellularity",
     )
     glomerular_thrombi = models.BooleanField(
         blank=True, null=True, verbose_name="glomerular thrombi"
@@ -481,6 +501,12 @@ class Histology(UserScopedModel):
         blank=True,
         max_length=200,
         verbose_name="other immunohistochemistry (IHC)",
+    )
+    # collapse: electron_microscopy
+    mesangial_hypercellularity = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="mesangial hypercellularity",
     )
     electron_dense_deposits = models.BooleanField(
         blank=True,
@@ -526,6 +552,7 @@ class Histology(UserScopedModel):
         max_length=200,
         verbose_name="other electron microscopy (EM)",
     )
+    # collapse: immunofluorescence
     igg_staining = models.CharField(
         max_length=10,
         blank=True,
@@ -616,6 +643,7 @@ class Histology(UserScopedModel):
         choices=FibrinDeposition.choices,
         verbose_name="fibrin deposition",
     )
+    # collapse: histology_diagnosis
     principal_diagnosis = models.CharField(
         max_length=200,
         blank=True,
