@@ -278,10 +278,9 @@ class Histology(UserScopedModel):
     # variables
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     biopsy = models.ForeignKey(Biopsy, null=True, on_delete=models.SET_NULL)
-    
-    histology_date = models.DateField(
-        blank=True,
-    )
+
+    # require: used to distinguish multiple biopsies
+    histology_date = models.DateField()
     clinical_biopsy_indication = models.CharField(
         max_length=100,
         choices=ClinicalBiopsyIndication.choices,

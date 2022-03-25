@@ -9,7 +9,7 @@ class TransplantAdmin(ImportExportModelAdmin):
     resource_class = resources.TransplantResource
     fieldsets = (
         (None, {
-            'fields': ('id', 'transplant_date', 'donor_ref', 'recipient_ref'),
+            'fields': ('transplant_date', 'donor_ref', 'recipient_ref'),
         }),
         ('Recipient', {
             'classes': ('collapse',),
@@ -25,7 +25,7 @@ class TransplantAdmin(ImportExportModelAdmin):
         }),
         ('Graft', {
             'classes': ('collapse',),
-            'fields': ('procurement_date', 'donor_aboi', ('hla_a_mismatches', 'hla_b_mismatches', 'hla_dr_mismatches'), 'cold_ischemia_time', 'cold_ischemia_time_units', ('delayed_graft_function', 'dgf_time', 'dgf_time_units'), 'induction_therapy', 'preformed_dsa', 'dsa_date', 'immunodominant_dsa_class', 'i_dsa_specificity', 'i_dsa_mfi', 'c1q_binding'),
+            'fields': ('procurement_date', 'donor_aboi', ('hla_a_mismatches', 'hla_b_mismatches', 'hla_dr_mismatches'), ('cold_ischemia_time', 'cold_ischemia_time_units'), ('delayed_graft_function', 'dgf_time', 'dgf_time_units'), 'induction_therapy', 'preformed_dsa', 'dsa_date', 'immunodominant_dsa_class', 'i_dsa_specificity', 'i_dsa_mfi', 'c1q_binding'),
         }),
         ('Day 0 biopsy', {
             'classes': ('collapse',),
@@ -59,11 +59,11 @@ class HistologyAdmin(ImportExportModelAdmin):
     resource_class = resources.HistologyResource
     fieldsets = (
         (None, {
-            'fields': ('id', 'biopsy', 'histology_date', 'biopsy_assessment', 'biopsy_method', 'tissue_technique', 'num_cores', 'num_glomeruli', 'num_glomerulosclerosis', 'num_sclerotic_glomeruli', 'num_arteries', 'biopsy_quality', 'fsgs_type', 'ati_status', ('tma_status', 'tma_location')),
+            'fields': ('biopsy', 'histology_date', 'biopsy_assessment', 'biopsy_method', 'tissue_technique', 'num_cores', 'num_glomeruli', 'num_glomerulosclerosis', 'num_sclerotic_glomeruli', 'num_arteries', 'biopsy_quality', 'fsgs_type', 'ati_status', ('tma_status', 'tma_location')),
         }),
         ('Banff lesions: acute', {
             'classes': ('collapse',),
-            'fields': ('g_score', 'ptc_score', 'i_score', 't_score', 'v_score', 'ptc_score'),
+            'fields': ('g_score', 'ptc_score', 'i_score', 't_score', 'v_score'),
         }),
         ('Banff lesions: chronic', {
             'classes': ('collapse',),
@@ -71,7 +71,7 @@ class HistologyAdmin(ImportExportModelAdmin):
         }),
         ('Banff lesions: acute/chronic', {
             'classes': ('collapse',),
-            'fields': ('ti_score', 'i_ifta_score', 't_ifa_score', 'percent_cortex_if', 'percent_ifta', 'chronic_allograft_arteriopathy', 'pvl_load_level'),
+            'fields': ('ti_score', 'i_ifta_score', 't_ifta_score', 'percent_cortex_if', 'percent_ifta', 'chronic_allograft_arteriopathy', 'pvl_load_level'),
         }),
         ('Immunohistochemistry', {
             'classes': ('collapse',),
@@ -83,7 +83,7 @@ class HistologyAdmin(ImportExportModelAdmin):
         }),
         ('Immunofluorescence', {
             'classes': ('collapse',),
-            'fields': (('igg_staining', 'igg_location'), ('iga_staining', 'iga_location'), ('igm_staining', 'igm_location'), ('c1q_staining', 'c1q_location'), ('c3_staining', 'c3_lcation'), ('kappa_staining', 'kappa_location'), ('lambda_staining', 'lambda_location'), 'fibrin_deposition'),
+            'fields': (('igg_staining', 'igg_location'), ('iga_staining', 'iga_location'), ('igm_staining', 'igm_location'), ('c1q_staining', 'c1q_location'), ('c3_staining', 'c3_location'), ('kappa_staining', 'kappa_location'), ('lambda_staining', 'lambda_location'), 'fibrin_deposition'),
         }),
         ('Histology diagnosis', {
             'classes': ('collapse',),

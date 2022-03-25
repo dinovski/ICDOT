@@ -37,7 +37,7 @@ class Biopsy(UserScopedModel):
     class ProtDipstickUnits(models.TextChoices):
         MG_DL_RANGE = "mg/dL range", _("mg/dL range")
 
-    class ProtCreatRatioUnits(models.TextChoices):
+    class ProteinCreatinineRatioUnits(models.TextChoices):
         G_G = "g/g", _("g/g")
 
     class Immunosuppressants(models.TextChoices):
@@ -108,11 +108,11 @@ class Biopsy(UserScopedModel):
     # Main info
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
-    
+
     # transplant date?
     biopsy_date = models.DateField()
     biopsy_egfr = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(500.0)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(120.0)],
         blank=True,
         null=True,
         verbose_name="recipient eGFR (mL/min/1.73m2)",
@@ -167,8 +167,8 @@ class Biopsy(UserScopedModel):
     )
     prot_creat_ratio_units = models.CharField(
         max_length=50,
-        default=ProtCreatRatioUnits.G_G,
-        choices=ProtCreatRatioUnits.choices,
+        default=ProteinCreatinineRatioUnits.G_G,
+        choices=ProteinCreatinineRatioUnits.choices,
     )
     systolic_bp = models.IntegerField(
         blank=True,

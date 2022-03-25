@@ -37,6 +37,7 @@ class Transplant(UserScopedModel):
         LATINO = "Hispanic or Latino", _("Hispanic or Latino")
         PACIFIC = "Pacific Islander", _("Pacific Islander")
         WHITE = "white", _("white")
+        OTHER = "other", _("other")
 
     class CreatinemiaUnits(models.TextChoices):
         UMOL_L = "umol/L", _("umol/L")
@@ -72,6 +73,7 @@ class Transplant(UserScopedModel):
         KIDNEY = "kidney", _("kidney")
         LIVER = "liver", _("liver")
         LUNG = "lung", _("lung")
+        COMBINED = "combined transplant", _("combined transplant")
 
     class PrimaryDisease(models.TextChoices):
         AMYLOIDOSIS = "amyloidosis", _("amyloidosis")
@@ -140,7 +142,9 @@ class Transplant(UserScopedModel):
     class TimeUnits(models.TextChoices):
         MINUTES = "minutes", _("minutes")
         HOURS = "hours", _("hours")
+        MONTHS = "months", _("months")
         DAYS = "days", _("days")
+        YEARS = "years", _("years")
 
     class InductionTherapy(models.TextChoices):
         ATG = "thymoglbulin", _("thymoglbulin")
@@ -223,6 +227,11 @@ class Transplant(UserScopedModel):
         blank=True,
         null=True,
     )
+    time_on_dialysis_units = models.CharField(
+        blank=True,
+        max_length=50,
+        choices=TimeUnits.choices,
+    )
     previous_transplant = models.CharField(
         max_length=100,
         choices=PreviousTransplant.choices,
@@ -286,6 +295,7 @@ class Transplant(UserScopedModel):
     # Donor information
     donor_record_date = models.DateField(
         blank=True,
+        null=True,
     )
     donor_dob = models.DateField(
         blank=True,
@@ -294,6 +304,7 @@ class Transplant(UserScopedModel):
     donor_age = models.IntegerField(
         blank=True,
         null=True,
+        verbose_name="donor age (years)",
     )
     donor_sex = models.CharField(
         max_length=1,
@@ -351,7 +362,7 @@ class Transplant(UserScopedModel):
         blank=True,
     )
     donor_egfr = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(500.0)],
+        validators=[MinValueValidator(0.0), MaxValueValidator(120.0)],
         blank=True,
         null=True,
         verbose_name="Donor eGFR (mL/min/1.73m2)",
@@ -410,7 +421,9 @@ class Transplant(UserScopedModel):
         verbose_name="total HLA-DR mismatches",
     )
     cold_ischemia_time = models.FloatField(
-        blank=True, null=True, verbose_name="Cold Ischemia Time (CIT)"
+        blank=True,
+        null=True,
+        verbose_name="Cold Ischemia Time (CIT)"
     )
     cold_ischemia_time_units = models.CharField(
         blank=True,
@@ -451,18 +464,18 @@ class Transplant(UserScopedModel):
         blank=True,
         max_length=50,
         choices=iDSAclass.choices,
-        verbose_name="iDSA class",
+        verbose_name=" iDSA class",
     )
     i_dsa_specificity = models.CharField(
         blank=True,
         max_length=50,
         choices=iDSAspecifiity.choices,
-        verbose_name="iDSA specificity",
+        verbose_name=" iDSA specificity",
     )
     i_dsa_mfi = models.IntegerField(
         blank=True,
         null=True,
-        verbose_name="iDSA MFI",
+        verbose_name=" iDSA MFI",
     )
     c1q_binding = models.BooleanField(
         blank=True,
@@ -479,21 +492,25 @@ class Transplant(UserScopedModel):
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
+        verbose_name=" ci score", #temporary hack to prevent auto-capitalization
     )
     ct_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
+        verbose_name=" ct score",
     )
     cv_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
+        verbose_name=" cv score",
     )
     ah_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
+        verbose_name=" ah score",
     )
     percent_glomerulosclerosis = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
