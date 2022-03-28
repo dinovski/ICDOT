@@ -4,6 +4,9 @@ from nonrelated_inlines.admin import NonrelatedStackedInline
 
 from bhot.transplants import forms, models, resources
 
+admin.site.site_title = 'ICDOT'
+admin.site.site_header = 'ICDOT'
+
 @admin.register(models.Transplant)
 class TransplantAdmin(ImportExportModelAdmin):
     resource_class = resources.TransplantResource
