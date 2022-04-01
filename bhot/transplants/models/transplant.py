@@ -180,7 +180,7 @@ class Transplant(UserScopedModel):
     donor_ref = models.CharField(max_length=256)
     recipient_ref = models.CharField(max_length=256)
 
-   # Recipient information
+    # Recipient information
     recipient_record_date = models.DateField(
         blank=True,
         null=True,
@@ -421,9 +421,7 @@ class Transplant(UserScopedModel):
         verbose_name="total HLA-DR mismatches",
     )
     cold_ischemia_time = models.FloatField(
-        blank=True,
-        null=True,
-        verbose_name="Cold Ischemia Time (CIT)"
+        blank=True, null=True, verbose_name="Cold Ischemia Time (CIT)"
     )
     cold_ischemia_time_units = models.CharField(
         blank=True,
@@ -492,7 +490,7 @@ class Transplant(UserScopedModel):
         validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
-        verbose_name=" ci score", #temporary hack to prevent auto-capitalization
+        verbose_name=" ci score",  # temporary hack to prevent auto-capitalization
     )
     ct_score = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(3)],
