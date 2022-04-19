@@ -12,26 +12,6 @@ class Biopsy(UserScopedModel):
     class Meta:
         verbose_name_plural = "biopsies"
 
-    class PreTransplantBiopsyType(models.TextChoices):
-        PRE_IMPLANT = "pre-implantation", _("pre-implantation")
-        PROCUREMENT = "procurement", _("procurement")
-
-    class ClinicalBiopsyIndication(models.TextChoices):
-        PROTOCOL = "protocol", _("protocol")
-        DGF = "DGF", _("Delayed Graft Function")
-        SD = "slow deterioration", _(
-            "slow deterioration (progressive increase in serum creatinine over time)"
-        )
-        ARF = "ARF", _("Acute Renal Failure")
-        PROT_U = "proteinuria", _("proteinuria")
-        HEMATURIA = "hematuria", _("hematuria")
-        SUSP_AR = "SUSP_AR", _("Suspicious for acute rejection")
-        SUSP_PVN = "SUSP_PVN", _("Suspicious for Polyoma Virus Nephropathy")
-        TRANSPLANTECTOMY = "Transplantectomy", _("Transplantectomy biopsy")
-        DENOVO_DSA = "de novo DSA", _("de novo DSA")
-        FOLLOWUP = "follow-up", _("follow-up from previous biopsy")
-        # other:specify
-
     class CreatinemiaUnits(models.TextChoices):
         UMOL_L = "umol/L", _("umol/L")
         MG_L = "mg/L", _("mg/L")
@@ -57,7 +37,7 @@ class Biopsy(UserScopedModel):
     class ProtDipstickUnits(models.TextChoices):
         MG_DL_RANGE = "mg/dL range", _("mg/dL range")
 
-    class ProtCreatRatioUnits(models.TextChoices):
+    class ProteinCreatinineRatioUnits(models.TextChoices):
         G_G = "g/g", _("g/g")
 
     class Immunosuppressants(models.TextChoices):
@@ -128,58 +108,56 @@ class Biopsy(UserScopedModel):
     # Main info
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant = models.ForeignKey(Transplant, null=True, on_delete=models.SET_NULL)
+
     # transplant date?
     biopsy_date = models.DateField()
-    pre_transplant_biopsy_type = models.CharField(
-        max_length=100,
-        choices=PreTransplantBiopsyType.choices,
+    biopsy_egfr = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(120.0)],
         blank=True,
+        null=True,
+        verbose_name="recipient eGFR (mL/min/1.73m2)",
     )
-    clinical_biopsy_indication = models.CharField(
-        max_length=100,
-        choices=ClinicalBiopsyIndication.choices,
+    biopsy_egfr_date = models.DateField(
         blank=True,
+        null=True,
+        verbose_name="recipient eGFR date",
     )
-    creatinemia = models.FloatField(
+    biopsy_proteinuria = models.FloatField(
         blank=True,
         null=True,
     )
-    creatinemia_units = models.CharField(
+    biopsy_proteinuria_units = models.CharField(
         max_length=50,
-        default=CreatinemiaUnits.UMOL_L,
-        choices=CreatinemiaUnits.choices,
-    )
-    creatinuria = models.FloatField(
-        blank=True,
-        null=True,
-    )
-    creatinuria_units = models.CharField(
-        max_length=50,
-        default=CreatinuriaUnits.MMOL_L,
-        choices=CreatinuriaUnits.choices,
-    )
-    proteinuria = models.FloatField(
-        blank=True,
-        null=True,
-    )
-    proteinuria_units = models.CharField(
-        max_length=50,
-        default=ProteinuriaUnits.MG_DL,
         choices=ProteinuriaUnits.choices,
+        default=ProteinuriaUnits.MG_DL,
     )
-    proteinuria_dipstick = models.CharField(
+    biopsy_proteinuria_dipstick = models.CharField(
         max_length=20,
         blank=True,
         choices=ProtDipstick.choices,
     )
-    proteinuria_dipstick_units = models.CharField(
+    biopsy_proteinuria_dipstick_units = models.CharField(
         max_length=50,
         default=ProtDipstickUnits.MG_DL_RANGE,
         choices=ProtDipstickUnits.choices,
     )
-    proteinuria_date = models.DateField(
+    biopsy_creatinemia = models.FloatField(
         blank=True,
         null=True,
+    )
+    biopsy_creatinemia_units = models.CharField(
+        max_length=50,
+        default=CreatinemiaUnits.UMOL_L,
+        choices=CreatinemiaUnits.choices,
+    )
+    biopsy_creatinuria = models.FloatField(
+        blank=True,
+        null=True,
+    )
+    biopsy_creatinuria_units = models.CharField(
+        max_length=50,
+        default=CreatinuriaUnits.MMOL_L,
+        choices=CreatinuriaUnits.choices,
     )
     prot_creat_ratio = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(30.0)],
@@ -189,9 +167,20 @@ class Biopsy(UserScopedModel):
     )
     prot_creat_ratio_units = models.CharField(
         max_length=50,
-        default=ProtCreatRatioUnits.G_G,
-        choices=ProtCreatRatioUnits.choices,
+        default=ProteinCreatinineRatioUnits.G_G,
+        choices=ProteinCreatinineRatioUnits.choices,
     )
+    systolic_bp = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="systolic blood pressure (mm Hg)",
+    )
+    diastolic_bp = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="diastolic blood pressure (mm Hg)",
+    )
+    # collapse: treatment
     immunosuppressants = models.CharField(
         max_length=100,
         blank=True,
@@ -238,6 +227,7 @@ class Biopsy(UserScopedModel):
         blank=True,
         null=True,
     )
+    # collapse: biomarkers
     dd_cf_dna = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
         blank=True,
@@ -259,15 +249,11 @@ class Biopsy(UserScopedModel):
         null=True,
         verbose_name="EBV load (copies/mL)",
     )
+    # collapse: dsa
     dsa_at_biopsy = models.BooleanField(
         blank=True,
         null=True,
         verbose_name="DSA at time of biopsy",
-    )
-    preformed_dsa = models.BooleanField(
-        blank=True,
-        null=True,
-        verbose_name="pre-formed DSA",
     )
     history_dsa = models.BooleanField(
         blank=True,
@@ -305,39 +291,4 @@ class Biopsy(UserScopedModel):
         max_length=100,
         blank=True,
         choices=nonAntiHlaDsa.choices,
-    )
-    graft_failure_cause = models.CharField(
-        max_length=100,
-        blank=True,
-        choices=GraftFailureCause.choices,
-    )
-    graft_failure_date = models.DateField(
-        blank=True,
-        null=True,
-    )
-    ci_score = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(3)],
-        blank=True,
-        null=True,
-    )
-    ct_score = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(3)],
-        blank=True,
-        null=True,
-    )
-    cv_score = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(3)],
-        blank=True,
-        null=True,
-    )
-    ah_score = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(3)],
-        blank=True,
-        null=True,
-    )
-    percent_glomerulosclerosis = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
-        blank=True,
-        null=True,
-        verbose_name="percent sclerotic glomeruli",
     )

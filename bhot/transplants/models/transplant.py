@@ -37,6 +37,7 @@ class Transplant(UserScopedModel):
         LATINO = "Hispanic or Latino", _("Hispanic or Latino")
         PACIFIC = "Pacific Islander", _("Pacific Islander")
         WHITE = "white", _("white")
+        OTHER = "other", _("other")
 
     class CreatinemiaUnits(models.TextChoices):
         UMOL_L = "umol/L", _("umol/L")
@@ -60,12 +61,19 @@ class Transplant(UserScopedModel):
     class ProtDipstickUnits(models.TextChoices):
         MG_DL_RANGE = "mg/dL range", _("mg/dL range")
 
+    class GraftFailureCause(models.TextChoices):
+        DEATH = "death", _("death")
+        INFECTION = "infection", _("infection")
+        RECURRENT_DISEASE = "recurrent disease", _("recurrent disease")
+        REJECTION = "rejection", _("rejection")
+
     class PreviousTransplant(models.TextChoices):
         NO = "no", _("no")
         HEART = "heart", _("heart")
         KIDNEY = "kidney", _("kidney")
         LIVER = "liver", _("liver")
         LUNG = "lung", _("lung")
+        COMBINED = "combined transplant", _("combined transplant")
 
     class PrimaryDisease(models.TextChoices):
         AMYLOIDOSIS = "amyloidosis", _("amyloidosis")
@@ -134,7 +142,9 @@ class Transplant(UserScopedModel):
     class TimeUnits(models.TextChoices):
         MINUTES = "minutes", _("minutes")
         HOURS = "hours", _("hours")
+        MONTHS = "months", _("months")
         DAYS = "days", _("days")
+        YEARS = "years", _("years")
 
     class InductionTherapy(models.TextChoices):
         ATG = "thymoglbulin", _("thymoglbulin")
@@ -160,14 +170,133 @@ class Transplant(UserScopedModel):
         DQ = "DQ", _("DQ")
         DP = "DP", _("DP")
 
+    class PreTransplantBiopsyType(models.TextChoices):
+        PRE_IMPLANT = "pre-implantation", _("pre-implantation")
+        PROCUREMENT = "procurement", _("procurement")
+
     # Main information
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     transplant_date = models.DateField()
     donor_ref = models.CharField(max_length=256)
     recipient_ref = models.CharField(max_length=256)
 
+    # Recipient information
+    recipient_record_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    recipient_dob = models.DateField(
+        blank=True,
+        null=True,
+    )
+    recipient_height = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="recipient height",
+    )
+    recipient_height_units = models.CharField(
+        max_length=50,
+        default=HeightUnits.CM,
+        choices=HeightUnits.choices,
+    )
+    recipient_weight = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="recipient weight",
+    )
+    recipient_weight_units = models.CharField(
+        max_length=50,
+        default=WeightUnits.KG,
+        choices=WeightUnits.choices,
+    )
+    recipient_sex = models.CharField(
+        max_length=1,
+        choices=Sex.choices,
+        blank=True,
+    )
+    recipient_ethnicity = models.CharField(
+        max_length=100,
+        choices=Ethnicity.choices,
+        blank=True,
+    )
+    pre_transplant_dialysis = models.BooleanField(
+        blank=True,
+        null=True,
+    )
+    time_on_dialysis = models.IntegerField(
+        blank=True,
+        null=True,
+    )
+    time_on_dialysis_units = models.CharField(
+        blank=True,
+        max_length=50,
+        choices=TimeUnits.choices,
+    )
+    previous_transplant = models.CharField(
+        max_length=100,
+        choices=PreviousTransplant.choices,
+        blank=True,
+    )
+    primary_kidney_disease = models.CharField(
+        max_length=200,
+        blank=True,
+        choices=PrimaryDisease.choices,
+        verbose_name="primary kidney disease",
+    )
+    recipient_cmv_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="Cytomegalovirus status",
+    )
+    recipient_ebv_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="Epstein-Barr virus status",
+    )
+    recipient_hbv_ag_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="HBV HBsAg status",
+    )
+    recipient_hbv_as_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="HBV HBsAs status",
+    )
+    recipient_hbv_ac_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="HBV HBsAc status",
+    )
+    recipient_hcv_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="Hepatitus C status",
+    )
+    recipient_hiv_status = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name="HIV status",
+    )
+    # Outcomes
+    recipient_death_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    graft_failure_date = models.DateField(
+        blank=True,
+        null=True,
+    )
+    graft_failure_cause = models.CharField(
+        max_length=100,
+        blank=True,
+        choices=GraftFailureCause.choices,
+    )
     # Donor information
-    donor_record_date = models.DateField()
+    donor_record_date = models.DateField(
+        blank=True,
+        null=True,
+    )
     donor_dob = models.DateField(
         blank=True,
         null=True,
@@ -175,6 +304,7 @@ class Transplant(UserScopedModel):
     donor_age = models.IntegerField(
         blank=True,
         null=True,
+        verbose_name="donor age (years)",
     )
     donor_sex = models.CharField(
         max_length=1,
@@ -185,10 +315,6 @@ class Transplant(UserScopedModel):
         max_length=100,
         choices=Ethnicity.choices,
         blank=True,
-    )
-    procurement_date = models.DateField(
-        blank=True,
-        null=True,
     )
     donor_criteria = models.CharField(
         max_length=100,
@@ -215,25 +341,6 @@ class Transplant(UserScopedModel):
         choices=CauseDeath.choices,
         blank=True,
     )
-    donor_egfr = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(500.0)],
-        blank=True,
-        null=True,
-        verbose_name="Donor eGFR (mL/min/1.73m2)",
-    )
-    donor_egfr_date = models.DateField(
-        blank=True,
-        null=True,
-    )
-    donor_proteinuria = models.FloatField(
-        blank=True,
-        null=True,
-    )
-    donor_proteinuria_units = models.CharField(
-        max_length=50,
-        choices=ProteinuriaUnits.choices,
-        default=ProteinuriaUnits.G_G,
-    )
     kdri = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
         blank=True,
@@ -254,14 +361,11 @@ class Transplant(UserScopedModel):
         max_length=500,
         blank=True,
     )
-    donor_creatinemia = models.FloatField(
+    donor_egfr = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(120.0)],
         blank=True,
         null=True,
-    )
-    donor_creatinemia_units = models.CharField(
-        max_length=50,
-        default=CreatinemiaUnits.UMOL_L,
-        choices=CreatinemiaUnits.choices,
+        verbose_name="Donor eGFR (mL/min/1.73m2)",
     )
     donor_proteinuria = models.FloatField(
         blank=True,
@@ -270,7 +374,7 @@ class Transplant(UserScopedModel):
     donor_proteinuria_units = models.CharField(
         max_length=50,
         choices=ProteinuriaUnits.choices,
-        default=ProteinuriaUnits.MG_DL,
+        default=ProteinuriaUnits.G_G,
     )
     donor_proteinuria_dipstick = models.CharField(
         max_length=20,
@@ -282,7 +386,17 @@ class Transplant(UserScopedModel):
         default=ProtDipstickUnits.MG_DL_RANGE,
         choices=ProtDipstickUnits.choices,
     )
-    donor_proteinuria_date = models.DateField(
+    donor_creatinemia = models.FloatField(
+        blank=True,
+        null=True,
+    )
+    donor_creatinemia_units = models.CharField(
+        max_length=50,
+        default=CreatinemiaUnits.UMOL_L,
+        choices=CreatinemiaUnits.choices,
+    )
+    # Graft
+    procurement_date = models.DateField(
         blank=True,
         null=True,
     )
@@ -348,151 +462,59 @@ class Transplant(UserScopedModel):
         blank=True,
         max_length=50,
         choices=iDSAclass.choices,
-        verbose_name="iDSA class",
+        verbose_name=" iDSA class",
     )
     i_dsa_specificity = models.CharField(
         blank=True,
         max_length=50,
         choices=iDSAspecifiity.choices,
-        verbose_name="iDSA specificity",
+        verbose_name=" iDSA specificity",
     )
     i_dsa_mfi = models.IntegerField(
         blank=True,
         null=True,
-        verbose_name="iDSA MFI",
+        verbose_name=" iDSA MFI",
     )
     c1q_binding = models.BooleanField(
         blank=True,
         null=True,
         verbose_name="C1q binding",
     )
-
-    # Recipient information
-    recipient_record_date = models.DateField(
-        blank=True,
-        null=True,
-    )
-    recipient_dob = models.DateField(
-        blank=True,
-        null=True,
-    )
-    recipient_weight = models.FloatField(
-        blank=True,
-        null=True,
-        verbose_name="recipient weight",
-    )
-    recipient_weight_units = models.CharField(
-        max_length=50,
-        default=WeightUnits.KG,
-        choices=WeightUnits.choices,
-    )
-    recipient_height = models.FloatField(
-        blank=True,
-        null=True,
-        verbose_name="recipient height",
-    )
-    recipient_weight_units = models.CharField(
-        max_length=50,
-        default=HeightUnits.CM,
-        choices=HeightUnits.choices,
-    )
-    recipient_sex = models.CharField(
-        max_length=1,
-        choices=Sex.choices,
-        blank=True,
-    )
-    recipient_ethnicity = models.CharField(
+    # Day 0 biopsy
+    pre_transplant_biopsy_type = models.CharField(
         max_length=100,
-        choices=Ethnicity.choices,
+        choices=PreTransplantBiopsyType.choices,
         blank=True,
     )
-    pre_transplant_dialysis = models.BooleanField(
-        blank=True,
-        null=True,
-    )
-    time_on_dialysis = models.IntegerField(
+    ci_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
+        verbose_name=" ci score",  # temporary hack to prevent auto-capitalization
     )
-    previous_transplant = models.CharField(
-        max_length=100,
-        choices=PreviousTransplant.choices,
-        blank=True,
-    )
-    recipient_hiv_status = models.BooleanField(
+    ct_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
-        verbose_name="HIV status",
+        verbose_name=" ct score",
     )
-    recipient_hbv_ag_status = models.BooleanField(
+    cv_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
-        verbose_name="HBV HBsAg status",
+        verbose_name=" cv score",
     )
-    recipient_hbv_as_status = models.BooleanField(
+    ah_score = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3)],
         blank=True,
         null=True,
-        verbose_name="HBV HBsAs status",
+        verbose_name=" ah score",
     )
-    recipient_hbv_ac_status = models.BooleanField(
+    percent_glomerulosclerosis = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],
         blank=True,
         null=True,
-        verbose_name="HBV HBsAc status",
-    )
-    recipient_hcv_status = models.BooleanField(
-        blank=True,
-        null=True,
-        verbose_name="Hepatitus C status",
-    )
-    recipient_systolic_bp = models.IntegerField(
-        blank=True,
-        null=True,
-        verbose_name="recipient systolic blood pressure (mm Hg)",
-    )
-    recipient_diastolic_bp = models.IntegerField(
-        blank=True,
-        null=True,
-        verbose_name="recipient diastolic blood pressure (mm Hg)",
-    )
-    primary_kidney_disease = models.CharField(
-        max_length=200,
-        blank=True,
-        choices=PrimaryDisease.choices,
-        verbose_name="primary kidney disease",
-    )
-    recipient_egfr = models.FloatField(
-        validators=[MinValueValidator(0.0), MaxValueValidator(500.0)],
-        blank=True,
-        null=True,
-        verbose_name="recipient eGFR (mL/min/1.73m2)",
-    )
-    recipient_egfr_date = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name="recipient eGFR date",
-    )
-    recipient_proteinuria = models.FloatField(
-        blank=True,
-        null=True,
-    )
-    recipient_proteinuria_units = models.CharField(
-        max_length=50,
-        choices=ProteinuriaUnits.choices,
-        default=ProteinuriaUnits.MG_DL,
-    )
-    recipient_proteinuria_dipstick = models.CharField(
-        max_length=20,
-        blank=True,
-        choices=ProtDipstick.choices,
-    )
-    recipient_proteinuria_dipstick_units = models.CharField(
-        max_length=50,
-        default=ProtDipstickUnits.MG_DL_RANGE,
-        choices=ProtDipstickUnits.choices,
-    )
-    recipient_proteinuria_date = models.DateField(
-        blank=True,
-        null=True,
+        verbose_name="percent sclerotic glomeruli",
     )
 
     def __str__(self):

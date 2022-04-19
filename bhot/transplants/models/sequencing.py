@@ -35,6 +35,7 @@ class SequencingData(UserScopedModel, TrackFileUploadModel):
         max_length=100,
         choices=RNAstorage.choices,
         default=RNAstorage.FFPE,
+        verbose_name="RNA storage",
     )
     rna_concentration = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(10000.0)],
