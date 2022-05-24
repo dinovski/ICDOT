@@ -1,4 +1,4 @@
-bhot
+icdot
 ====
 
 Data collection from participating transplant centers.
@@ -49,7 +49,7 @@ Check `pre-commit`'s documentation_ but one way of installing it locally is:
 How to update models
 ^^^^^^^^^^^^^^^^^^^^
 
-Adding fields to models happens by first editing `<bhot/transplants/models/>`_.
+Adding fields to models happens by first editing `<icdot/transplants/models/>`_.
 
 Then don't forget to build the migrations::
 
@@ -57,7 +57,7 @@ Then don't forget to build the migrations::
 
 And once you've tested and are happy with that you can commit it::
 
-  $ git add bhot/ransplants/migrations/
+  $ git add icdot/ransplants/migrations/
 
 
 Settings
@@ -88,7 +88,7 @@ Running type checks with mypy:
 
 ::
 
-  $ mypy bhot
+  $ mypy icdot
 
 Test coverage
 ^^^^^^^^^^^^^
