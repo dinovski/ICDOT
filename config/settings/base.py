@@ -6,8 +6,8 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# bhot/
-APPS_DIR = ROOT_DIR / "bhot"
+# icdot/
+APPS_DIR = ROOT_DIR / "icdot"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
@@ -80,8 +80,8 @@ THIRD_PARTY_APPS = [
     "loginas",
 ]
 LOCAL_APPS = [
-    "bhot.users",
-    "bhot.transplants",
+    "icdot.users",
+    "icdot.transplants",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -90,7 +90,7 @@ INSTALLED_APPS = DJANGO_APPS + ADMIN_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "bhot.contrib.sites.migrations"}
+MIGRATION_MODULES = {"sites": "icdot.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "bhot.utils.middleware.CurrentUserMiddleware",
+    "icdot.utils.middleware.CurrentUserMiddleware",
 ]
 
 # STATIC
@@ -192,7 +192,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             "libraries": {
-                "custom_tags": "bhot.templatetags.custom_tags",
+                "custom_tags": "icdot.templatetags.custom_tags",
             },
         },
     }
@@ -277,9 +277,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "bhot.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "icdot.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "bhot.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "icdot.users.adapters.SocialAccountAdapter"
 
 
 # Your stuff...

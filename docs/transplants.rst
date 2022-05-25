@@ -3,6 +3,6 @@
 Transplants
 ======================================================================
 
-.. automodule:: bhot.transplants.models
+.. automodule:: icdot.transplants.models
    :members:
    :noindex:
